@@ -1,0 +1,34 @@
+<root> ::= <LinearLayout> | <RelativeLayout>
+
+<LinearLayout> ::= "<LinearLayout" <LinearAttributes> ">" <element>+ "</LinearLayout>"
+<RelativeLayout> ::= "<RelativeLayout" <RelativeAttributes> ">" <element>* "</RelativeLayout>"
+
+<element> ::= <TextView> | <ImageView> | <Button> | <RadioGroup> | <ProgressBar> | <LinearLayout> | <RelativeLayout>
+
+<LinearAttributes> ::= <PrimaryAttributes> <AndroidID>? <AndroidOrientation>?
+<RelativeAttributes> ::= <PrimaryAttributes> <AndroidID>?
+
+<TextView> ::= "<TextView" <PrimaryAttributes> <AndroidText> <AndroidID>? <AndroidTextColour>? "/>"
+<ImageView> ::= "<ImageView" <PrimaryAttributes> <AndroidSRC> <AndroidID>? <AndroidPadding>? "/>"
+<Button> ::= "<Button" <PrimaryAttributes> <AndroidText> <AndroidID>? <AndroidPadding>? "/>"
+<RadioGroup> ::= "<RadioGroup" <AndroidID>? <AndroidCheckedButton>? ">" <RadioButton>+ "</RadioGroup>"
+<RadioButton> ::= "<RadioButton" <PrimaryAttributes> <AndroidText> <AndroidID>? "/>"
+<ProgressBar> ::= "<ProgressBar" <PrimaryAttributes> <AndroidID>? <AndroidMax>? <AndroidProgress>? "/>"
+
+<PrimaryAttributes> ::= <AndroidHeight> <AndroidWidth>
+
+<AndroidHeight> ::= 'android:layout_height' '=' <value>
+<AndroidWidth> ::= 'android:layout_width' '=' <value>
+<AndroidID> ::= 'android:id' '=' <alphanumeric>
+<AndroidOrientation> ::= 'android:orientation' '=' <alphanumeric>
+<AndroidText> ::= 'android:text' '=' <alphanumeric>
+<AndroidTextColour> ::= 'android:textColor' '=' <alphanumeric>
+<AndroidSRC> ::= 'android:src' '=' <alphanumeric>
+<AndroidPadding> ::= 'android:padding' '=' <positive_integer>
+<AndroidCheckedButton> ::= 'android:checkedButton' '=' <alphanumeric>
+<AndroidProgress> ::= 'android:progress' '=' <positive_integer>
+<AndroidMax> ::= 'android:max' '=' <positive_integer>
+
+<value> ::= <alphanumeric> | <positive_integer>
+<alphanumeric> ::= [a-zA-Z0-9]+
+<positive_integer> ::= [1-9][0-9]*

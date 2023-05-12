@@ -24,41 +24,88 @@ void yyerror(const char* msg);
 int yyparse();
 
 /* Struct definitions */
+
+ 
+struct LinearLayout {
+        struct element* element;
+        struct linear_attributes* attributes;
+};
+
+struct RelativeLayout {
+        struct element* element;
+        struct relative_attributes* attributes;
+};
+
 struct element {
-  text_view | image_view | button | radio_group | radio_button | progress_bar
+        char* tag_name;
+        struct element* parent;
+        struct element* children;
+        int num_children;
+        struct text_view* text_view;
+        struct image_view* image_view;
+        struct button* button;
+        struct radio_group* radio_group;
+        struct progress_bar* progress_bar;
+        struct LinearLayout* linear_layout;
+        struct RelativeLayout* relative_layout;
 };
 
 struct linear_attributes {
-  
+        PrimaryAttributes* primary_attributes;
+        AndroidID* android_id;
+        AndroidOrientation* android_orientation;
 };
 
 struct relative_attributes {
-  /* TODO */
+        PrimaryAttributes* primary_attributes;
+        AndroidID* android_id;
 };
 
 struct text_view {
-  /* TODO */
+        PrimaryAttributes* primary_attributes;
+        AndroidText* android_text;
+        AndroidID* android_id;
+        AndroidTextColour* android_text_colour;
 };
 
 struct image_view {
-  /* TODO */
+        PrimaryAttributes* primary_attributes;
+        AndroidSRC* android_src;
+        AndroidID* android_id;
+        AndroidPadding* android_padding;
 };
 
 struct button {
-  /* TODO */
+        PrimaryAttributes* primary_attributes;
+        AndroidText* android_text;
+        AndroidID* android_id;
+        AndroidPadding* android_padding;
 };
 
 struct radio_group {
-  /* TODO */
+        struct radio_button* radio_button;
+        AndroidID* android_id;
+        AndroidCheckButton* android_check_button;
 };
 
 struct radio_button {
-  /* TODO */
+        PrimaryAttributes* primary_attributes;
+        AndroidID* android_id;
+        AndroidText* android_text;
+        AndroidID* android_id;
 };
 
 struct progress_bar {
-  /* TODO */
+        PrimaryAttributes* primary_attributes;
+        AndroidID* android_id;
+        AndroidProgress* android_progress;
+        AndroidMax* android_max;
 };
+
+/*struct PrimaryAttributes {
+        AndroidHeight* android_height;
+        AndroidWidth* android_width;
+        }; */
 
 /* Global variables */
 struct element* root_element;
@@ -102,7 +149,7 @@ button : PrimaryAttributes AndroidText AndroidID AndroidPadding
 radio_group : radio_button AndroidID AndroidCheckButton
         ;
 
-radio_button : PrimaryAttributes AndroidID AndroidText AndroidID
+radio_button : PrimaryAttributes AndroidID AndroidText
         ;
 
 progress_bar : PrimaryAttributes AndroidID AndroidProgress AndroidMax
@@ -111,47 +158,47 @@ progress_bar : PrimaryAttributes AndroidID AndroidProgress AndroidMax
 PrimaryAttributes : AndroidHeight AndroidWidth
         ;
 
-AndroidHeight : 'Height :' value
+AndroidHeight: 'Height :' value
         ;
 
-AndroidWidth : 'Width :' value
+AndroidWidth: 'Width :' value
         ;
 
-AndroidID : 'ID :' alphanumeric
+AndroidID: 'ID :' alphanumeric
         ;
 
-AndroidOrientation : 'Orientation :' alphanumeric
+AndroidOrientation: 'Orientation :' alphanumeric
         ;
 
-AndroidText : 'Text :' alphanumeric
+AndroidText: 'Text :' alphanumeric
         ;
 
-AndroidTextColour : 'TextColour :' alphanumeric
+AndroidTextColour: 'TextColour :' alphanumeric
         ;
 
-AndroidSRC : 'SRC :' alphanumeric 
+AndroidSRC: 'SRC :' alphanumeric 
         ;
 
-AndroidPadding : 'Padding :' PositiveInteger
+AndroidPadding: 'Padding :' PositiveInteger
         ;
 
-AndroidCheckButton : 'CheckButton :' alphanumeric
+AndroidCheckButton: 'CheckButton :' alphanumeric
         ;
 
-AndroidProgress : 'Progress :' PositiveInteger
+AndroidProgress: 'Progress :' PositiveInteger
         ;
 
-AndroidMax : 'Max :' PositiveInteger
+AndroidMax: 'Max :' PositiveInteger
         ;
 
-value : alphanumeric
+value:    alphanumeric
         | PositiveInteger
         ;
 
-alphanumeric : [a-zA-Z0-9]+
+alphanumeric: [a-zA-Z0-9]+
         ;
 
-PositiveInteger : [0-9]+
+PositiveInteger: [0-9]+
         ;
 
 %%

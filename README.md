@@ -1,1 +1,1 @@
-# flex_and_bison
+# Flex and Bison project for university

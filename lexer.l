@@ -20,12 +20,14 @@ void lexer_error(const char *msg) {
 %}
 
 %%
-"<root>"                {return T_ROOT;}
+
 "<LinearLayout>"        {return T_LINEAR_LAYOUT;}
 "</LinearLayout>"       {return T_CLOSE_LINEAR_LAYOUT;}
 "<RelativeLayout>"      {return T_RELATIVE_LAYOUT;}
 "</RelativeLayout>"     {return T_CLOSE_RELATIVE_LAYOUT;}
 "<element>"             {return T_ELEMENT;}
+"<LinearAttributes>"    {return T_LINEAR_ATTRIBUTES;}
+"<RelativeAttributes>"  {return T_RELATIVE_ATTRIBUTES;}
 "<TextView/>"           {return T_TEXT_VIEW;}
 "<ImageView/>"          {return T_IMAGE_VIEW;}
 "<Button/>"             {return T_BUTTON;}
@@ -45,6 +47,7 @@ void lexer_error(const char *msg) {
 "android:checkedButton" {return T_A_CHECKED_BUTTON;}
 "android:progress"      {return T_A_PROGRESS;}
 "android:max"           {return T_A_MAX;}
+"value"                 {return T_VALUE;}
 [0-9]+                  {return T_INTEGER;}
 [a-zA-Z0-9]+            {return T_ALPHANUMERIC;}
 "<"                     {return T_OPEN_ANGLE;}

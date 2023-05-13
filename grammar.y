@@ -4,204 +4,134 @@
 #include <string.h>
 #include "parser.h"
 
-/* Forward declarations */
-struct element;
-struct linear_attributes;
-struct relative_attributes;
-struct text_view;
-struct image_view;
-struct button;
-struct radio_group;
-struct radio_button;
-struct progress_bar;
 
-/* External variables */
-extern char* yytext;
-extern int yyleng;
 extern int yylex();
-
-/* Function prototypes */
-void yyerror(const char* msg);
-int yyparse();
-
-/* Struct definitions */
-
- 
-struct LinearLayout {
-        struct element* element;
-        struct linear_attributes* attributes;
-};
-
-struct RelativeLayout {
-        struct element* element;
-        struct relative_attributes* attributes;
-};
-
-struct element {
-        char* tag_name;
-        struct element* parent;
-        struct element* children;
-        int num_children;
-        struct text_view* text_view;
-        struct image_view* image_view;
-        struct button* button;
-        struct radio_group* radio_group;
-        struct progress_bar* progress_bar;
-        struct LinearLayout* linear_layout;
-        struct RelativeLayout* relative_layout;
-};
-
-struct linear_attributes {
-        PrimaryAttributes* primary_attributes;
-        AndroidID* android_id;
-        AndroidOrientation* android_orientation;
-};
-
-struct relative_attributes {
-        PrimaryAttributes* primary_attributes;
-        AndroidID* android_id;
-};
-
-struct text_view {
-        PrimaryAttributes* primary_attributes;
-        AndroidText* android_text;
-        AndroidID* android_id;
-        AndroidTextColour* android_text_colour;
-};
-
-struct image_view {
-        PrimaryAttributes* primary_attributes;
-        AndroidSRC* android_src;
-        AndroidID* android_id;
-        AndroidPadding* android_padding;
-};
-
-struct button {
-        PrimaryAttributes* primary_attributes;
-        AndroidText* android_text;
-        AndroidID* android_id;
-        AndroidPadding* android_padding;
-};
-
-struct radio_group {
-        struct radio_button* radio_button;
-        AndroidID* android_id;
-        AndroidCheckButton* android_check_button;
-};
-
-struct radio_button {
-        PrimaryAttributes* primary_attributes;
-        AndroidID* android_id;
-        AndroidText* android_text;
-        AndroidID* android_id;
-};
-
-struct progress_bar {
-        PrimaryAttributes* primary_attributes;
-        AndroidID* android_id;
-        AndroidProgress* android_progress;
-        AndroidMax* android_max;
-};
-
-/*struct PrimaryAttributes {
-        AndroidHeight* android_height;
-        AndroidWidth* android_width;
-        }; */
-
-/* Global variables */
-struct element* root_element;
-
+extern int yyparse();
+extern FILE *yyin;
+void yyerror(const char* s);
 %}
 
-%%
+%token T_LINEAR_LAYOUT
+%token T_CLOSE_LINEAR_LAYOUT
+%token T_RELATIVE_LAYOUT
+%token T_CLOSE_RELATIVE_LAYOUT
+%token T_ELEMENT
+%token T_LINEAR_ATTRIBUTES
+%token T_RELATIVE_ATTRIBUTES
+%token T_TEXT_VIEW
+%token T_IMAGE_VIEW
+%token T_BUTTON
+%token T_RADIO_GROUP
+%token T_CLOSE_RADIO_GROUP
+%token T_RADIO_BUTTON
+%token T_PROGRESS_BAR
+%token T_PRIMARY_ATTRIBUTE
+%token T_A_LAYOUT_HEIGHT
+%token T_A_LAYOUT_WIDTH
+%token T_A_ID
+%token T_A_ORIENTATION
+%token T_A_TEXT
+%token T_A_TEXT_COLOUR
+%token T_A_SRC
+%token T_A_PADDING
+%token T_A_CHECKED_BUTTON
+%token T_A_PROGRESS
+%token T_A_MAX
+%token T_VALUE
+%token T_INTEGER
+%token T_ALPHANUMERIC
+%token T_OPEN_ANGLE
+%token T_CLOSE_ANGLE
+%token T_SLASH_CLOSE_ANGLE
+%token T_EQUALS
+%token T_NEWLINE
+%token T_WHITESPACE
+%token T_ERROR
 
-root : LinearLayout
-        | RelativeLayout
-        ;
+%start root 
 
-LinearLayout : linear_attributes '{' elements '}'
-        ;
-
-RelativeLayout : relative_attributes '{' elements '}'
-        ;
-
-elements : text_view
-        | image_view
-        | button
-        | radio_group
-        | progress_bar
-        ;
-
-linear_attributes : PrimaryAttributes AndroidID AndroidOrientation
-        ;
-
-relative_attributes : PrimaryAttributes AndroidID 
-        ;
-
-text_view : PrimaryAttributes AndroidText AndroidID AndroidTextColour
-        ;
-
-image_view : PrimaryAttributes AndroidSRC AndroidID AndroidPadding
-        ;
-
-button : PrimaryAttributes AndroidText AndroidID AndroidPadding
-        ;
-
-radio_group : radio_button AndroidID AndroidCheckButton
-        ;
-
-radio_button : PrimaryAttributes AndroidID AndroidText
-        ;
-
-progress_bar : PrimaryAttributes AndroidID AndroidProgress AndroidMax
-        ;
-
-PrimaryAttributes : AndroidHeight AndroidWidth
-        ;
-
-AndroidHeight: 'Height :' value
-        ;
-
-AndroidWidth: 'Width :' value
-        ;
-
-AndroidID: 'ID :' alphanumeric
-        ;
-
-AndroidOrientation: 'Orientation :' alphanumeric
-        ;
-
-AndroidText: 'Text :' alphanumeric
-        ;
-
-AndroidTextColour: 'TextColour :' alphanumeric
-        ;
-
-AndroidSRC: 'SRC :' alphanumeric 
-        ;
-
-AndroidPadding: 'Padding :' PositiveInteger
-        ;
-
-AndroidCheckButton: 'CheckButton :' alphanumeric
-        ;
-
-AndroidProgress: 'Progress :' PositiveInteger
-        ;
-
-AndroidMax: 'Max :' PositiveInteger
-        ;
-
-value:    alphanumeric
-        | PositiveInteger
-        ;
-
-alphanumeric: [a-zA-Z0-9]+
-        ;
-
-PositiveInteger: [0-9]+
-        ;
 
 %%
 
+root: T_LINEAR_LAYOUT
+     |T_RELATIVE_LAYOUT
+    ;
+
+LinearLayout:T_OPEN_ANGLE T_LINEAR_LAYOUT T_LINEAR_ATTRIBUTES T_CLOSE_ANGLE T_ELEMENT T_CLOSE_LINEAR_LAYOUT
+;
+
+RelativeLayout:T_OPEN_ANGLE T_RELATIVE_LAYOUT T_RELATIVE_ATTRIBUTES T_CLOSE_ANGLE T_ELEMENT T_CLOSE_RELATIVE_LAYOUT
+;
+
+Element: T_TEXT_VIEW
+        |T_IMAGE_VIEW
+        |T_BUTTON
+        |T_RADIO_GROUP
+        |T_PROGRESS_BAR
+        |T_LINEAR_LAYOUT
+        |T_RELATIVE_LAYOUT
+        ;
+
+LinearAttributes:T_PRIMARY_ATTRIBUTE T_A_ID T_A_ORIENTATION
+;
+
+RelativeAttributes:T_PRIMARY_ATTRIBUTE T_A_ID
+;
+
+TextView:T_PRIMARY_ATTRIBUTE T_A_TEXT T_A_ID T_A_TEXT_COLOUR T_SLASH_CLOSE_ANGLE
+;
+
+ImageView:T_PRIMARY_ATTRIBUTE T_A_SRC T_A_ID T_A_PADDING T_SLASH_CLOSE_ANGLE
+;
+
+Button:T_PRIMARY_ATTRIBUTE T_A_TEXT T_A_ID T_A_PADDING T_SLASH_CLOSE_ANGLE
+;
+
+RadioGroup:T_OPEN_ANGLE T_PRIMARY_ATTRIBUTE T_A_ID T_A_CHECKED_BUTTON T_CLOSE_ANGLE T_RADIO_BUTTON T_CLOSE_RADIO_GROUP
+;
+
+RadioButton:T_PRIMARY_ATTRIBUTE T_A_TEXT T_A_ID T_SLASH_CLOSE_ANGLE
+;
+
+ProgressBar:T_PRIMARY_ATTRIBUTE T_A_PROGRESS T_A_MAX T_A_ID T_SLASH_CLOSE_ANGLE
+;
+
+PrimaryAttrubute:T_A_LAYOUT_HEIGHT|T_A_LAYOUT_WIDTH
+;
+Height:T_A_LAYOUT_HEIGHT T_EQUALS T_VALUE 
+;
+
+Width:T_A_LAYOUT_WIDTH T_EQUALS T_VALUE
+;
+
+ID:T_A_ID T_EQUALS T_ALPHANUMERIC
+;
+
+Orientation:T_A_ORIENTATION T_EQUALS T_ALPHANUMERIC
+;
+
+Text:T_A_TEXT T_EQUALS T_ALPHANUMERIC
+;
+
+TextColour:T_A_TEXT_COLOUR T_EQUALS T_ALPHANUMERIC
+;
+
+Src:T_A_SRC T_EQUALS T_ALPHANUMERIC
+;
+
+Padding:T_A_PADDING T_EQUALS T_INTEGER
+;
+
+CheckedButton:T_A_CHECKED_BUTTON T_EQUALS T_ALPHANUMERIC
+;
+
+Progress:T_A_PROGRESS T_EQUALS T_INTEGER
+;
+
+Max:T_A_MAX T_EQUALS T_INTEGER
+;
+
+Value: T_VALUE T_EQUALS T_INTEGER
+| T_VALUE T_EQUALS T_ALPHANUMERIC
+        ;
 

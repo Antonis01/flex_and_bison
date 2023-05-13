@@ -4,8 +4,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-//#include "parser.h"
-#define YY_DECL int yylex()
 
 //helper function that prints the token
 void printToken(const char *token){

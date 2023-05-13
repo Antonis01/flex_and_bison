@@ -20,10 +20,12 @@ void lexer_error(const char *msg) {
 %}
 
 %%
+"<root>"                {return T_ROOT;}
 "<LinearLayout>"        {return T_LINEAR_LAYOUT;}
 "</LinearLayout>"       {return T_CLOSE_LINEAR_LAYOUT;}
 "<RelativeLayout>"      {return T_RELATIVE_LAYOUT;}
 "</RelativeLayout>"     {return T_CLOSE_RELATIVE_LAYOUT;}
+"<element>"             {return T_ELEMENT;}
 "<TextView/>"           {return T_TEXT_VIEW;}
 "<ImageView/>"          {return T_IMAGE_VIEW;}
 "<Button/>"             {return T_BUTTON;}
@@ -31,6 +33,7 @@ void lexer_error(const char *msg) {
 "</RadioGroup>"         {return T_CLOSE_RADIO_GROUP;}
 "<RadioButton/>"        {return T_RADIO_BUTTON;}
 "<ProgressBar/>"        {return T_PROGRESS_BAR;}
+"<PrimaryAttribute>"    {return T_PRIMARY_ATTRIBUTE;}
 "android:layout_height" {return T_A_LAYOUT_HEIGHT;}
 "android:layout_width"  {return T_A_LAYOUT_WIDTH;}
 "android:id"            {return T_A_ID;}

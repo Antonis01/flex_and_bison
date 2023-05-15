@@ -1,11 +1,11 @@
-myParser: grammar.y lexer.l grammar.tab.h lex.yy.c
-		gcc -g -Wall -o myParser lex.yy.c grammar.tab.c -lfl
+myParser: lex.yy.c grammar.tab.c
+	gcc -o myParser grammar.tab.c lex.yy.c -lfl
+
+grammar.tab.c grammar.tab.h: grammar.y
+	bison -d grammar.y
 
 lex.yy.c: lexer.l grammar.tab.h
-		flex lexer.l
-
-grammar.tab.h: grammar.y
-		bison -vd grammar.y
+	flex lexer.l
 
 clean:
-		rm -f myParser myParser.lex.h myParser.tab.* lex.yy.c myParser.output
+	rm myParser grammar.tab.c lex.yy.c grammar.tab.h grammar.output

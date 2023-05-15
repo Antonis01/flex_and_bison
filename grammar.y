@@ -6,7 +6,9 @@
 extern int yylex();
 extern int yyparse();
 extern FILE *yyin;
-void yyerror(const char* s);
+void yyerror(const char* s){
+  printf("Syntax error: %s\n",s);
+}
 %}
 
 %token T_LINEAR_LAYOUT

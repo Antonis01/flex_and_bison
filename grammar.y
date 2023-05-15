@@ -11,6 +11,8 @@ void yyerror(const char* s){
 }
 %}
 
+%token T_ROOT
+%token T_CLOSE_ROOT
 %token T_LINEAR_LAYOUT
 %token T_CLOSE_LINEAR_LAYOUT
 %token T_RELATIVE_LAYOUT

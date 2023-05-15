@@ -1,3 +1,5 @@
+XML_FILE = android.xml
+
 myParser.exe: lex.yy.c grammar.tab.c
 	gcc -o myParser.exe grammar.tab.c lex.yy.c -lfl
 

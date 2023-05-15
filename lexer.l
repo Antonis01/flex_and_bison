@@ -42,14 +42,31 @@ void lexer_error(const char* msg) {
 "</LinearLayout>"       {return T_CLOSE_LINEAR_LAYOUT;}
 "<RelativeLayout>"      {return T_RELATIVE_LAYOUT;}
 "</RelativeLayout>"     {return T_CLOSE_RELATIVE_LAYOUT;}
+"<element>"             {return T_ELEMENT;}
+"</element>"            {return T_CLOSE_ELEMENT;}
+"<TextView>"            {return T_TEXT_VIEW;}
+"</TextView>"           {return T_CLOSE_TEXT_VIEW;}
+"<ImageView>"           {return T_IMAGE_VIEW;}
+"</ImageView>"          {return T_CLOSE_IMAGE_VIEW;}
+"<Button>"              {return T_BUTTON;}
+"</Button>"             {return T_CLOSE_BUTTON;}
+"RadioGroup>"           {return T_RADIO_GROUP;}
 "</RadioGroup>"         {return T_CLOSE_RADIO_GROUP;}
+"<ProgressBar>"         {return T_PROGRESS_BAR;}
+"</ProgressBar>"        {return T_CLOSE_PROGRESS_BAR;}
+"<LinearAttributes>"    {return T_LINEAR_ATTRIBUTES;}
+"</LinearAttributes>"   {return T_CLOSE_LINEAR_ATTRIBUTES;}
+"<RelativeAttributes>"  {return T_RELATIVE_ATTRIBUTES;}
+"</RelativeAttributes>" {return T_CLOSE_RELATIVE_ATTRIBUTES;}
+"PrimaryAttributes>"    {return T_PRIMARY_ATTRIBUTES;}
+"</PrimaryAttributes>"  {return T_CLOSE_PRIMARY_ATTRIBUTES;}
 "android:layout_height" {return T_A_LAYOUT_HEIGHT;}
 "android:layout_width"  {return T_A_LAYOUT_WIDTH;}
 "android:id"            {return T_A_ID;}
 "android:orientation"   {return T_A_ORIENTATION;}
 "android:text"          {return T_A_TEXT;}
 "android:textColour"    {return T_A_TEXT_COLOUR;}
-"adnroid:src"           {return T_A_SRC;}
+"android:src"           {return T_A_SRC;}
 "android:padding"       {return T_A_PADDING;}
 "android:checkedButton" {return T_A_CHECKED_BUTTON;}
 "android:progress"      {return T_A_PROGRESS;}
@@ -61,7 +78,7 @@ void lexer_error(const char* msg) {
 ">"                     {return T_CLOSE_ANGLE;}
 "/>"                    {return T_SLASH_CLOSE_ANGLE;}
 "="                     {return T_EQUALS;}
-"\n"                    {/*ignore new lines*/}
+\n                      { /* ignore new lines */ }
 [ \t\r]                 {/*ignore whitespaces*/}
 .                       {return T_ERROR; }
 %%

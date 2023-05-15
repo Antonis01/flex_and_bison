@@ -13,17 +13,7 @@ void yyerror(const char* s);
 %token T_CLOSE_LINEAR_LAYOUT
 %token T_RELATIVE_LAYOUT
 %token T_CLOSE_RELATIVE_LAYOUT
-%token T_ELEMENT
-//%token T_LINEAR_ATTRIBUTES
-//%token T_RELATIVE_ATTRIBUTES
-//%token T_TEXT_VIEW
-//%token T_IMAGE_VIEW
-//%token T_BUTTON
-//%token T_RADIO_GROUP
 %token T_CLOSE_RADIO_GROUP
-//%token T_RADIO_BUTTON
-//%token T_PROGRESS_BAR
-//%token T_PRIMARY_ATTRIBUTE
 %token T_A_LAYOUT_HEIGHT
 %token T_A_LAYOUT_WIDTH
 %token T_A_ID
@@ -42,9 +32,8 @@ void yyerror(const char* s);
 %token T_CLOSE_ANGLE
 %token T_SLASH_CLOSE_ANGLE
 %token T_EQUALS
-//%token T_NEWLINE
 %token T_WHITESPACE
-//%token T_ERROR
+%token T_ERROR
 
 %start root 
 

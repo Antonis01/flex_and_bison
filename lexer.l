@@ -4,31 +4,24 @@
 
 %{
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
-//#include "parser.h"
-#define YY_DECL int yylex()
 #include "grammar.tab.h"
-//helper function that prints the token
-void printToken(const char *token){
-       printf("Token: %s\n",token);
-    }
 
-//helper function that handles the errors
-void lexer_error(const char* msg) {
-    printf("Error: %s at line %d\n", msg, yylineno + 1);
+#define YY_DECL int yylex()
+#define MAX_LINE_LENGTH 256
 
-    // Print the line content
-    fseek(yyin, 0, SEEK_SET); // Move file pointer to the beginning
-    int line_number = 1;
-    char line[256];
+int current_line = 0;
 
-    while (fgets(line, sizeof(line), yyin) != NULL) {
-        if (line_number == yylineno + 1) {
-            printf("Line %d: %s", line_number, line);
-            break;
-        }
-        line_number++;
+void lexer_error(const char *message, const char *tokenText) {
+    printf("Error at line %d: %s '%s'\n", current_line, message, tokenText);
+}
+
+// Helper function that prints the token and the line number
+void printToken(int token, const char *tokenText) {
+    if (token == T_ERROR) {
+        lexer_error("Invalid token", tokenText);
+    } else {
+        printf("Token at line %d: %s\n", current_line, tokenText);
     }
 }
 
@@ -78,9 +71,9 @@ void lexer_error(const char* msg) {
 ">"                     {return T_CLOSE_ANGLE;}
 "/>"                    {return T_SLASH_CLOSE_ANGLE;}
 "="                     {return T_EQUALS;}
-\n                      { /* ignore new lines */ }
+\n                      { current_line++; return T_NEWLINE;}
 [ \t\r]                 {/*ignore whitespaces*/}
-.                       {return T_ERROR; }
+.                       { printToken(T_ERROR, yytext); }
 %%
 
 int main(int argc, char **argv) {
@@ -88,26 +81,22 @@ int main(int argc, char **argv) {
         printf("Usage: %s <input_file>\n", argv[0]);
         return 1;
     }
-    
-    FILE* file = fopen(argv[1], "r");
-    if (!file) {
+
+    FILE* file;
+    if ((file = fopen(argv[1], "r")) == NULL) {
         printf("Error: Could not open file %s\n", argv[1]);
         return 1;
     }
-    
+
     yyin = file;
 
     int token;
     while ((token = yylex()) != 0) {
-        if (token == T_ERROR) {
-            // Handle error token
-            lexer_error("Invalid token");   
-        } else {
-            // Handle other tokens
-           // printf("Token: %d\n", token);
+        if (token != T_NEWLINE) {
+            printToken(token, yytext); // Pass both the token and yytext
         }
     }
-    
+
     fclose(file);
     return 0;
 }

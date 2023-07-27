@@ -2,14 +2,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <syslog.h>
 
 extern int yylex();
 extern int yyparse();
 extern FILE *yyin;
 void yyerror(const char* s){
-  printf("Syntax error: %s\n",s);
+  syslog(LOG_ERR, "Syntax error: %s\n", s);
 }
 %}
+
 
 %token T_ROOT
 %token T_CLOSE_ROOT
@@ -55,7 +57,7 @@ void yyerror(const char* s){
 %token T_EQUALS
 %token T_WHITESPACE
 %token T_ERROR
-
+%token T_NEWLINE
 %start root 
 
 

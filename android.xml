@@ -1,7 +1,7 @@
 <root>
     <LinearLayout>
         <LinearAttributes>
-            <AndroidHeight>wrap_content</AndroidHeight>
+            <android:layout_height>wrap_content</AndroidHeight>
             <AndroidWidth>match_parent</AndroidWidth>
             <AndroidOrientation>vertical</AndroidOrientation>
         </LinearAttributes>
@@ -226,5 +226,4 @@
         </element>
     </RelativeLayout>
 </root>
-```
-            
+

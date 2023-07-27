@@ -10,10 +10,10 @@
 #define YY_DECL int yylex()
 #define MAX_LINE_LENGTH 256
 
-int current_line = 0;
+int current_line = 1, check_line = 0, check = 0;
 
 void lexer_error(const char *message, const char *tokenText) {
-    printf("Error at line %d: %s '%s'\n", current_line, message, tokenText);
+    printf("Error at line %d: %s '%s'", current_line, message, tokenText);
 }
 
 // Helper function that prints the token and the line number
@@ -21,7 +21,22 @@ void printToken(int token, const char *tokenText) {
     if (token == T_ERROR) {
         lexer_error("Invalid token", tokenText);
     } else {
-        printf("Token at line %d: %s\n", current_line, tokenText);
+        //printf("Token at line %d: %s\n", current_line, tokenText);
+        if (current_line == check_line){
+            if (check == 1){
+                printf("\nToken at line %d: %s", current_line, tokenText);
+                check=0;
+            }
+            else{
+                printf("%s", tokenText);
+                check=0;
+            }
+        }
+        else{
+            printf("\nToken at line %d: %s", current_line, tokenText);
+            check_line = current_line;
+            check=0;
+        }
     }
 }
 
@@ -97,6 +112,7 @@ int main(int argc, char **argv) {
         }
     }
 
+    printf("\n\n");
     fclose(file);
     return 0;
 }

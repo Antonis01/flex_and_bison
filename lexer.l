@@ -8,7 +8,7 @@
 #include "grammar.tab.h"
 
 #define YY_DECL int yylex()
-#define MAX_LINE_LENGTH 256
+
 
 int current_line = 1, check_line = 0, check = 0;
 
@@ -84,7 +84,7 @@ void printToken(int token, const char *tokenText) {
 [a-zA-Z0-9]+            {return T_ALPHANUMERIC;}
 "<"                     {return T_OPEN_ANGLE;}
 ">"                     {return T_CLOSE_ANGLE;}
-"/>"                    {return T_SLASH_CLOSE_ANGLE;}
+"</"                    {return T_CLOSING_TAG;}
 "="                     {return T_EQUALS;}
 \n                      { current_line++; return T_NEWLINE;}
 [ \t\r]                 {/*ignore whitespaces*/}

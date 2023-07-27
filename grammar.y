@@ -53,7 +53,7 @@ void yyerror(const char* s){
 %token T_ALPHANUMERIC
 %token T_OPEN_ANGLE
 %token T_CLOSE_ANGLE
-%token T_SLASH_CLOSE_ANGLE
+%token T_CLOSING_TAG
 %token T_EQUALS
 %token T_WHITESPACE
 %token T_ERROR
@@ -88,22 +88,22 @@ LinearAttributes: PrimaryAttribute ID Orientation
 RelativeAttributes: PrimaryAttribute ID
 ;
 
-TextView: T_OPEN_ANGLE PrimaryAttribute Text ID TextColour T_SLASH_CLOSE_ANGLE
+TextView: T_OPEN_ANGLE PrimaryAttribute Text ID TextColour T_CLOSING_TAG
 ;
 
-ImageView: T_OPEN_ANGLE PrimaryAttribute Src ID Padding T_SLASH_CLOSE_ANGLE
+ImageView: T_OPEN_ANGLE PrimaryAttribute Src ID Padding T_CLOSING_TAG
 ;
 
-Button: T_OPEN_ANGLE PrimaryAttribute Text ID Padding T_SLASH_CLOSE_ANGLE
+Button: T_OPEN_ANGLE PrimaryAttribute Text ID Padding T_CLOSING_TAG
 ;
 
 RadioGroup:T_OPEN_ANGLE PrimaryAttribute ID CheckedButton T_CLOSE_ANGLE RadioButton T_CLOSE_RADIO_GROUP
 ;
 
-RadioButton: PrimaryAttribute Text ID T_SLASH_CLOSE_ANGLE
+RadioButton: PrimaryAttribute Text ID T_CLOSING_TAG
 ;
 
-ProgressBar:PrimaryAttribute Progress Max ID T_SLASH_CLOSE_ANGLE
+ProgressBar:PrimaryAttribute Progress Max ID T_CLOSING_TAG
 ;
 
 PrimaryAttribute: Height|Width

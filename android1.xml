@@ -1,0 +1,10 @@
+<root>
+    <LinearLayout>
+        <LinearAttributes>
+            <android:layout_height><PrimaryAttributes><Height>100</android:layout_height>
+            <android:layout_width><PrimaryAttributes><asefWidth>200</android:layout_width>
+            <android:orientation><PrimaryAttributes><></android:orientation>
+        </LinearAttributes>
+    </LinearLayout>
+</root>
+

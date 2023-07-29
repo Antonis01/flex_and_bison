@@ -13,13 +13,15 @@
 int current_line = 1, check_line = 0, check = 0;
 
 void lexer_error(const char *message, const char *tokenText) {
-    printf("Error at line %d: %s '%s'", current_line, message, tokenText);
+    printf("\nError at line %d: %s '%s'", current_line, message, tokenText);
 }
 
 // Helper function that prints the token and the line number
 void printToken(int token, const char *tokenText) {
     if (token == T_ERROR) {
-        lexer_error("Invalid token", tokenText);
+        lexer_error("\nExiting program because of Invalid token", tokenText);
+        printf("\n");
+        exit(0);
     } else {
         //printf("Token at line %d: %s\n", current_line, tokenText);
         if (current_line == check_line){
@@ -86,6 +88,9 @@ void printToken(int token, const char *tokenText) {
 ">"                     {return T_CLOSE_ANGLE;}
 "</"                    {return T_CLOSING_TAG;}
 "="                     {return T_EQUALS;}
+"<!--"                  {return T_COMMENT_OPENING_TAG;}
+"-->"                   {return T_COMMENT_CLOSING_TAG;}
+"--"                    { printToken(T_ERROR, yytext); }
 \n                      { current_line++; return T_NEWLINE;}
 [ \t\r]                 {/*ignore whitespaces*/}
 .                       { printToken(T_ERROR, yytext); }

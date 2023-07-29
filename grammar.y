@@ -58,6 +58,8 @@ void yyerror(const char* s){
 %token T_WHITESPACE
 %token T_ERROR
 %token T_NEWLINE
+%token T_COMMENT_OPENING_TAG
+%token T_COMMENT_CLOSING_TAG
 %start root 
 
 

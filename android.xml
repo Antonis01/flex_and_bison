@@ -1,0 +1,12 @@
+<root>
+    <LinearLayout>
+        <LinearAttributes>
+            <PrimaryAttributes>
+            <AndroidHeight android:layout_height=100>
+            <AndroidWidth android:layout_width= 200>
+            </PrimaryAttributes>
+        <AndroidID android:id=hello world>
+        <AndroidOrientation android:orientation=vertical>    
+        </LinearAttributes>
+    </LinearLayout>
+</root>

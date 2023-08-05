@@ -16,6 +16,49 @@ void lexer_error(const char *message, const char *tokenText) {
     printf("\nError at line %d: %s '%s'", current_line, message, tokenText);
 }
 
+// Define a maximum number of unique alphanumeric values
+#define MAX_UNIQUE_ALPHANUMERIC_VALUES 1000
+
+// Global array to store the unique alphanumeric values encountered
+char unique_alphanumeric_values[MAX_UNIQUE_ALPHANUMERIC_VALUES][64];
+int num_unique_alphanumeric_values = 0;
+
+// Function to check if the alphanumeric value is already present
+int is_unique_alphanumeric(const char *alphanumeric) {
+    for (int i = 0; i < num_unique_alphanumeric_values; i++) {
+        if (strcmp(alphanumeric, unique_alphanumeric_values[i]) == 0) {
+            return 0; // Not unique, already present
+        }
+    }
+    return 1; // Unique
+}
+
+// Function that checks if android:id uses unique values
+void unique_id(int token) {
+    if (token == T_A_ID) {
+        int next_token = yylex();
+        if (next_token == T_EQUALS) {
+            int new_next_token = yylex();
+            if (new_next_token == T_ALPHANUMERIC) {
+                const char *alphanumeric = yytext;
+                if (!is_unique_alphanumeric(alphanumeric)) {
+                    // Handle duplicate alphanumeric value here, e.g., raise an error
+                    lexer_error("Duplicate alphanumeric value found", alphanumeric);
+                    printf("\n\n");
+                    exit(0);
+                } else {
+                    // Add the new unique alphanumeric value to the array
+                    strcpy(unique_alphanumeric_values[num_unique_alphanumeric_values], alphanumeric);
+                    num_unique_alphanumeric_values++;
+
+                    // Print the unique android:id value
+                    printf("=%s", alphanumeric);
+                }
+            }
+        }
+    }
+}
+
 // Helper function that prints the token and the line number
 void printToken(int token, const char *tokenText) {
     if (token == T_ERROR) {
@@ -40,7 +83,9 @@ void printToken(int token, const char *tokenText) {
             check=0;
         }
     }
+    unique_id(token);
 }
+
 
 
 %}

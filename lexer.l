@@ -129,13 +129,16 @@ void printToken(int token, const char *tokenText) {
 "android:progress"      {return T_A_PROGRESS;}
 "android:max"           {return T_A_MAX;}
 "value"                 {return T_VALUE;}
+"wrap_content"          {return T_WRAP_CONTENT;}
+"match_parent"          {return T_MATCH_PARENT;}
+"PositiveInteger"       {return T_POSITIVE_INTEGER;}
 [0-9]+                  {return T_INTEGER;}
 [a-zA-Z0-9]+            {return T_ALPHANUMERIC;}
 "<"                     {return T_OPEN_ANGLE;}
 ">"                     {return T_CLOSE_ANGLE;}
 "</"                    {return T_CLOSING_TAG;}
 "="                     {return T_EQUALS;}
-"="*                   {printf("=");}   // Replace multiple '=' with a single '='
+"="*                    {printf("=");}   // Replace multiple '=' with a single '='
 "<!--"                  {return T_COMMENT_OPENING_TAG;}
 "-->"                   {return T_COMMENT_CLOSING_TAG;}
 "--"                    { printToken(T_ERROR, yytext); }

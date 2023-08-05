@@ -9,6 +9,8 @@
 
 #define YY_DECL int yylex()
 
+extern int yylex();
+
 
 int current_line = 1, check_line = 0, check = 0;
 
@@ -16,18 +18,21 @@ void lexer_error(const char *message, const char *tokenText) {
     printf("\nError at line %d: %s '%s'", current_line, message, tokenText);
 }
 
-// Define a maximum number of unique alphanumeric values
-#define MAX_UNIQUE_ALPHANUMERIC_VALUES 1000
+// Define a maximum number for the alphanumeric values
+#define MAX_ALPHANUMERIC_VALUES 1000
 
-// Global array to store the unique alphanumeric values encountered
-char unique_alphanumeric_values[MAX_UNIQUE_ALPHANUMERIC_VALUES][64];
-int num_unique_alphanumeric_values = 0;
+// array to store the unique alphanumeric values that we encountered
+char unique_alphanumeric_values[MAX_ALPHANUMERIC_VALUES][64];
+int num_alphanumeric_values = 0;
 
 // Function to check if the alphanumeric value is already present
 int is_unique_alphanumeric(const char *alphanumeric) {
-    for (int i = 0; i < num_unique_alphanumeric_values; i++) {
+    // Parse through the array to check if the alphanumeric value is already present
+    for (int i = 0; i < num_alphanumeric_values; i++) {
         if (strcmp(alphanumeric, unique_alphanumeric_values[i]) == 0) {
-            return 0; // Not unique, already present
+            lexer_error("Duplicate alphanumeric value found", alphanumeric);
+            printf("\n\n");
+            exit(0);
         }
     }
     return 1; // Unique
@@ -35,23 +40,20 @@ int is_unique_alphanumeric(const char *alphanumeric) {
 
 // Function that checks if android:id uses unique values
 void unique_id(int token) {
+    // Check if the token is android:id
     if (token == T_A_ID) {
         int next_token = yylex();
+        // Check if the next token is '='
         if (next_token == T_EQUALS) {
             int new_next_token = yylex();
+            // Check if the next token is alphanumeric
             if (new_next_token == T_ALPHANUMERIC) {
                 const char *alphanumeric = yytext;
-                if (!is_unique_alphanumeric(alphanumeric)) {
-                    // Handle duplicate alphanumeric value here, e.g., raise an error
-                    lexer_error("Duplicate alphanumeric value found", alphanumeric);
-                    printf("\n\n");
-                    exit(0);
-                } else {
+                // Check if the alphanumeric value is unique
+                if (is_unique_alphanumeric(alphanumeric)) {
                     // Add the new unique alphanumeric value to the array
-                    strcpy(unique_alphanumeric_values[num_unique_alphanumeric_values], alphanumeric);
-                    num_unique_alphanumeric_values++;
-
-                    // Print the unique android:id value
+                    strcpy(unique_alphanumeric_values[num_alphanumeric_values], alphanumeric);
+                    num_alphanumeric_values++;
                     printf("=%s", alphanumeric);
                 }
             }
@@ -133,6 +135,7 @@ void printToken(int token, const char *tokenText) {
 ">"                     {return T_CLOSE_ANGLE;}
 "</"                    {return T_CLOSING_TAG;}
 "="                     {return T_EQUALS;}
+"="*                   {printf("=");}   // Replace multiple '=' with a single '='
 "<!--"                  {return T_COMMENT_OPENING_TAG;}
 "-->"                   {return T_COMMENT_CLOSING_TAG;}
 "--"                    { printToken(T_ERROR, yytext); }

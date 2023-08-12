@@ -60,6 +60,13 @@ void unique_id(int token) {
         }
     }
 }
+void paddingT(int token){
+    if (token == T_A_PADDING){
+        token = T_POSITIVE_INTEGER;
+    else
+        printf("Error");
+    }
+}
 
 // Helper function that prints the token and the line number
 void printToken(int token, const char *tokenText) {
@@ -78,6 +85,7 @@ void printToken(int token, const char *tokenText) {
                 printf("%s", tokenText);
                 check=0;
             }
+            paddingT(token);
         }
         else{
             printf("\nToken at line %d: %s", current_line, tokenText);
@@ -86,6 +94,7 @@ void printToken(int token, const char *tokenText) {
         }
     }
     unique_id(token);
+    paddingT(token);
 }
 
 

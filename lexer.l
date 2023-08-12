@@ -92,7 +92,7 @@ void printToken(int token, const char *tokenText) {
                 printf("%s", tokenText);
                 check=0;
             }
-            paddingT(token);
+            
         }
         else{
             printf("\nToken at line %d: %s", current_line, tokenText);
@@ -102,6 +102,7 @@ void printToken(int token, const char *tokenText) {
     }
     unique_id(token);
     paddingT(token);
+    progressT(token);
 }
 
 

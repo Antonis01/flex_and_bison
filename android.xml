@@ -13,7 +13,7 @@
 		<TextView>
                     <PrimaryAttributes>
                     <AndroidHeight android:layout_height= match_parent>
-                    <AndroidWidth android:layout_width=200>
+                    <AndroidWidth android:layout_width=wrap_content>
                     </PrimaryAttributes>
                     <AndroidText android:text=hello world>
                     <AndroidID android:id=b11>
@@ -22,7 +22,7 @@
                 <ImageView>
                     <!--testing 2-->
                     <PrimaryAttributes>
-                    <AndroidHeight android:layout_height=100>
+                    <AndroidHeight android:layout_height=wrap_content>
                     <AndroidWidth android:layout_width= wrap_content>
                     </PrimaryAttributes>
                     <AndroidSRC android:src=hello world>
@@ -43,29 +43,28 @@
                     <AndroidCheckedButton android:checkedButton=hello world>
                     <RadioButton>
                         <PrimaryAttributes>
-                        <AndroidHeight android:layout_height=100>
-                        <AndroidWidth android:layout_width= 200>
+                        <AndroidHeight android:layout_height=match_parent>
+                        <AndroidWidth android:layout_width= match_parent>
                         </PrimaryAttributes>
                         <AndroidText android:text=hello world>
                         <AndroidID android:id=b15>
                     </RadioGroup>
                     <RadioButton>
                         <PrimaryAttributes>
-                        <AndroidHeight android:layout_height=100>
-                        <AndroidWidth android:layout_width= 200>
+                        <AndroidHeight android:layout_height=wrap_content>
+                        <AndroidWidth android:layout_width= match_parent>
                         </PrimaryAttributes>
                         <AndroidText android:text=hello world>
                         <AndroidID android:id=b16>
                     </RadioButton>
-                </RadioGroup>
                 <ProgressBar>
                     <PrimaryAttributes>
-                    <AndroidHeight android:layout_height=100>
-                    <AndroidWidth android:layout_width= 200>
+                    <AndroidHeight android:layout_height=wrap_content>
+                    <AndroidWidth android:layout_width= match_parent>
                     </PrimaryAttributes>
                     <AndroidID android:id=b17>
                     <AndroidMax android:max=100>
-                    <AndroidProgress android:progress=50>
+                    <AndroidProgress android:progress=151>
                 </ProgressBar>
             </element>
     </LinearLayout>
@@ -80,8 +79,8 @@
         <element>
         <TextView>
                     <PrimaryAttributes>
-                    <AndroidHeight android:layout_height=100>
-                    <AndroidWidth android:layout_width= 200>
+                    <AndroidHeight android:layout_height=wrap_content>
+                    <AndroidWidth android:layout_width= wrap_content>
                     </PrimaryAttributes>
                     <AndroidText android:text=hello world>
                     <AndroidID android:id=b21>
@@ -89,8 +88,8 @@
                 </TextView>
                 <ImageView>
                     <PrimaryAttributes>
-                    <AndroidHeight android:layout_height=100>
-                    <AndroidWidth android:layout_width= 200>
+                    <AndroidHeight android:layout_height=match_parent>
+                    <AndroidWidth android:layout_width= match_parent>
                     </PrimaryAttributes>
                     <AndroidSRC android:src=hello world>
                     <AndroidID android:id=b22>
@@ -98,8 +97,8 @@
                 </ImageView>
                 <Button>
                     <PrimaryAttributes>
-                    <AndroidHeight android:layout_height=100>
-                    <AndroidWidth android:layout_width= 200>
+                    <AndroidHeight android:layout_height=wrap_content>
+                    <AndroidWidth android:layout_width= match_parent>
                     </PrimaryAttributes>
                     <AndroidText android:text=hello world>
                     <AndroidID android:id=b23>

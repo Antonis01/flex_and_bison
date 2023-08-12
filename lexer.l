@@ -38,6 +38,15 @@ int is_unique_alphanumeric(const char *alphanumeric) {
     return 1; // Unique
 }
 
+int progressT_check(const char *integermax, const char *integerprogress){
+    if (integerprogress < 0 && integerprogress > integermax){
+        return 0;
+    }
+    else{
+        return 1;
+    }
+}
+
 // Function that checks if android:id uses unique values
 void unique_id(int token) {
     // Check if the token is android:id
@@ -61,20 +70,62 @@ void unique_id(int token) {
     }
 }
 void paddingT(int token){
-    if (token == T_A_PADDING && token = T_POSITIVE_INTEGER)
-        return token;
-    else
-        printf("Error");
-    
+    if (token == T_A_PADDING){
+    int next_token = yylex();
+        if (next_token == T_EQUALS){
+            int new_next_token = yylex();
+                if (new_next_token == T_INTEGER){
+                const char *integerpadding = yytext;
+                if (integerpadding > 0){
+                    printf("=%s", integerpadding);
+                }
+                else{
+                    lexer_error("\nExiting program because of Invalid token", integerpadding);
+                    printf("\n\n");
+                    exit(0);
+                }
+                }
+        }
+    }
 }
+
 void progressT(int token){
-   if (token == T_A_PROGRESS && token >=0 && token <=T_A_MAX);
-   return token;
-    else
-        printf("Error");
+    if (token == T_A_MAX) {
+    int next_token = yylex();
+
+        if (next_token == T_EQUALS) {
+            int new_next_token = yylex();
+
+                if (new_next_token == T_INTEGER) {
+                const char *integermax = yytext;
+                    printf("=%s", integermax);
+                    int next_new_next_token = yylex();
+
+                        if (next_new_next_token == T_A_PROGRESS){
+                            int new_next_new_next_token = yylex();
+
+                                if (new_next_new_next_token == T_EQUALS){
+                                    int next_new_next_new_next_new_next_token = yylex();
+
+                                        if (next_new_next_new_next_new_next_token == T_INTEGER){
+                                            const char *integerprogress = yytext;
+
+                                            if (progressT_check(integermax, integerprogress) == 1){
+                                                printf("=%s", integerprogress);
+                                            } else{
+                                                lexer_error("\nExiting program because of Invalid token", integerprogress);
+                                                printf("\n\n");
+                                                exit(0);
+                                            }
+                                        }
+                                }
+                        }
+                }
+        }
+    }
 }
     
-}
+
 // Helper function that prints the token and the line number
 void printToken(int token, const char *tokenText) {
     if (token == T_ERROR) {

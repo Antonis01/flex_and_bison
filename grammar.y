@@ -29,6 +29,8 @@ void yyerror(const char* s){
 %token T_CLOSE_BUTTON
 %token T_RADIO_GROUP
 %token T_CLOSE_RADIO_GROUP
+%token T_RADIO_BUTTON
+%token T_CLOSE_RADIO_BUTTON
 %token T_PROGRESS_BAR
 %token T_CLOSE_PROGRESS_BAR
 %token T_LINEAR_ATTRIBUTES

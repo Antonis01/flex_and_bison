@@ -125,6 +125,36 @@ void progressT(int token){
     }
 }
     
+void radio_button_id(int token){
+    if(token == T_A_ID){
+        int next_token = yylex();
+        if (next_token == T_EQUALS){
+            int new_next_token = yylex();
+            if (new_next_token == T_ALPHANUMERIC){
+                const char *alphanumeric_radio_button_id = yytext;
+                printf("=%s", alphanumeric_radio_button_id);
+                printf("\n\n\n");
+            }
+        }
+    }
+}
+
+void checked_button(int token){
+
+    if(token == T_A_CHECKED_BUTTON){
+        int next_token = yylex();
+        if (next_token == T_EQUALS){
+            int new_next_token = yylex();
+            if (new_next_token == T_ALPHANUMERIC){
+                const char *alphanumeric_checked_button = yytext;
+                printf("=%s", alphanumeric_checked_button);
+                printf("\n\n\n");
+
+            }
+        }
+    }
+}
+
 
 // Helper function that prints the token and the line number
 void printToken(int token, const char *tokenText) {
@@ -177,6 +207,8 @@ void printToken(int token, const char *tokenText) {
 "</Button>"             {return T_CLOSE_BUTTON;}
 "RadioGroup>"           {return T_RADIO_GROUP;}
 "</RadioGroup>"         {return T_CLOSE_RADIO_GROUP;}
+"<RadioButton>"         {return T_RADIO_BUTTON;}
+"</RadioButton>"        {return T_CLOSE_RADIO_BUTTON;}
 "<ProgressBar>"         {return T_PROGRESS_BAR;}
 "</ProgressBar>"        {return T_CLOSE_PROGRESS_BAR;}
 "<LinearAttributes>"    {return T_LINEAR_ATTRIBUTES;}

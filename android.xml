@@ -40,7 +40,7 @@
                 </Button>
                 <RadioGroup>
                     <AndroidID android:id=b14>
-                    <AndroidCheckedButton android:checkedButton=hello world>
+                    <AndroidCheckedButton android:checkedButton=b14>
                     <RadioButton>
                         <PrimaryAttributes>
                         <AndroidHeight android:layout_height=match_parent>

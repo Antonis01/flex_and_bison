@@ -41,13 +41,8 @@ int is_unique_alphanumeric(const char *alphanumeric) {
     return 1; // Unique
 }
 
-int progressT_check(const char *integermax, const char *integerprogress){
-    if (integerprogress < 0 && integerprogress > integermax){
-        return 0;
-    }
-    else{
-        return 1;
-    }
+void print_maxT(const char temp[]){
+    printf("=%s", temp);
 }
 
 // Function that checks if android:id uses unique values
@@ -92,42 +87,44 @@ void paddingT(int token){
     }
 }
 
-void progressT(int token){
-    if (token == T_A_MAX) {
-    int next_token = yylex();
-
-        if (next_token == T_EQUALS) {
+   void progressmaxt (int token){
+    if (token == T_A_MAX){
+    printf("\n sanity check 1\n");
+    int next_token= yylex();
+        if (next_token == T_EQUALS){
+            printf("\n sanity check 2\n");
             int new_next_token = yylex();
-
-                if (new_next_token == T_INTEGER) {
-                const char *integermax = yytext;
-                    printf("=%s", integermax);
-                    int next_new_next_token = yylex();
-
-                        if (next_new_next_token == T_A_PROGRESS){
-                            int new_next_new_next_token = yylex();
-
-                                if (new_next_new_next_token == T_EQUALS){
-                                    int next_new_next_new_next_new_next_token = yylex();
-
-                                        if (next_new_next_new_next_new_next_token == T_INTEGER){
-                                            const char *integerprogress = yytext;
-
-                                            if (progressT_check(integermax, integerprogress) == 1){
-                                                printf("=%s", integerprogress);
-                                            } else{
-                                                lexer_error("\nExiting program because of Invalid token", integerprogress);
-                                                printf("\n\n");
-                                                exit(0);
+                if (new_next_token == T_INTEGER){
+                    printf("\n sanity check 3\n");
+                    const char *temp = yytext;
+                    print_maxT(temp);
+                    int new_new_next_token = yylex();
+                        if (new_new_next_token = T_A_PROGRESS){
+                            printf("\n sanity check 4\n");
+                            int new_new_new_next_token = yylex();
+                                if (new_new_new_next_token = T_EQUALS){
+                                    printf("\n sanity check 5\n");
+                                    int final_token = yylex();
+                                        if(final_token = T_INTEGER){
+                                            printf("\n sanity check 6\n");
+                                            const char *progressnum = yytext;
+                                                if(progressnum > 0 && progressnum <= temp){
+                                                    printf("\n sanity check 8\n");
+                                                    printf("=%s", progressnum);}
+                                                else{
+                                                     printf("\n sanity check 7\n");
+                                                    lexer_error("\nExiting program because of Invalid token", progressnum);
+                                                    printf("\n\n");
+                                                    exit(0);}
+                                                
                                             }
                                         }
                                 }
                         }
                 }
+
         }
-    }
 }
-    
 
 
 const char *checked_button(int token) {
@@ -204,7 +201,7 @@ void printToken(int token, const char *tokenText, const char *alphanumeric_check
     }
     
     paddingT(token);
-    progressT(token);
+    progressmaxt(token);
 
     if (token == T_A_CHECKED_BUTTON) {
         alphanumeric_checked_button = checked_button(token);

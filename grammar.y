@@ -107,10 +107,10 @@ Button: T_OPEN_ANGLE PrimaryAttribute Text ID Padding T_CLOSING_TAG
 RadioGroup:T_OPEN_ANGLE PrimaryAttribute ID CheckedButton T_CLOSE_ANGLE RadioButton T_CLOSE_RADIO_GROUP
 ;
 
-RadioButton: PrimaryAttribute Text ID T_CLOSING_TAG
+RadioButton: PrimaryAttribute Text ID
 ;
 
-ProgressBar:PrimaryAttribute Progress Max ID T_CLOSING_TAG
+ProgressBar:PrimaryAttribute Progress Max ID
 ;
 
 PrimaryAttribute: Height|Width
@@ -121,7 +121,7 @@ Height: T_A_LAYOUT_HEIGHT T_EQUALS T_WHITESPACE Value
 Width: T_A_LAYOUT_WIDTH T_EQUALS T_WHITESPACE  Value
 ;
 
-ID: T_A_ID T_EQUALS T_WHITESPACE T_ALPHANUMERIC
+ID: T_A_ID T_EQUALS T_WHITESPACE T_ALPHANUMERIC T_CLOSING_TAG
 ;
 
 Orientation: T_A_ORIENTATION T_EQUALS T_WHITESPACE T_ALPHANUMERIC

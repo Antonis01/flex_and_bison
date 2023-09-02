@@ -40,7 +40,7 @@
                 </Button>
                 <RadioGroup>
                     <AndroidID android:id=b14>
-                    <AndroidCheckedButton android:checkedButton=b14>
+                    <AndroidCheckedButton android:checkedButton=b15>
                     <RadioButton>
                         <PrimaryAttributes>
                         <AndroidHeight android:layout_height=match_parent>
@@ -48,7 +48,7 @@
                         </PrimaryAttributes>
                         <AndroidText android:text=hello world>
                         <AndroidID android:id=b15>
-                    </RadioGroup>
+                    </RadioButton>
                     <RadioButton>
                         <PrimaryAttributes>
                         <AndroidHeight android:layout_height=wrap_content>
@@ -64,7 +64,7 @@
                     </PrimaryAttributes>
                     <AndroidID android:id=b17>
                     <AndroidMax android:max=100>
-                    <AndroidProgress android:progress=51>
+                    <AndroidProgress android:progress=151>
                 </ProgressBar>
             </element>
     </LinearLayout>
@@ -106,7 +106,7 @@
                 </Button>
                 <RadioGroup>
                     <AndroidID android:id=b24>
-                    <AndroidCheckedButton android:checkedButton=hello world>
+                    <AndroidCheckedButton android:checkedButton=b25>
                     <RadioGroup>
                         <PrimaryAttributes>
                         <AndroidHeight android:layout_height=100>

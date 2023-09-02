@@ -13,8 +13,9 @@ extern int yylex();
 
 
 int current_line = 1, check_line = 0, check = 0;
-//const char *alphanumeric_checked_button = NULL, *alphanumeric_radio_button_id = NULL;
-int passed_checked_button1 = 0, passed_checked_button2 = 0;
+char *alphanumeric_checked_button = NULL;
+char *alphanumeric_android_id = NULL;
+int passed_radio_button = 0;
 
 
 void lexer_error(const char *message, const char *tokenText) {
@@ -67,27 +68,31 @@ void unique_id(int token) {
         }
     }
 }
+
+
 void paddingT(int token){
-    if (token == T_A_PADDING){
     int next_token = yylex();
-        if (next_token == T_EQUALS){
-            int new_next_token = yylex();
-                if (new_next_token == T_INTEGER){
-                const char *integerpadding = yytext;
-                if (integerpadding > 0){
-                    printf("=%s", integerpadding);
-                }
-                else{
-                    lexer_error("\nExiting program because of Invalid token", integerpadding);
-                    printf("\n\n");
-                    exit(0);
-                }
-                }
+    
+    if (next_token == T_EQUALS){
+        int new_next_token = yylex();
+        
+        if (new_next_token == T_INTEGER){
+            const char *integerpadding = yytext;
+                
+            if (integerpadding > 0){
+                printf("=%s", integerpadding);
+            }
+            else{
+                lexer_error("\nExiting program because of Invalid token", integerpadding);
+                printf("\n\n");
+                exit(0);
+            }
         }
     }
 }
 
-   void progressmaxt (int token){
+
+void progressmaxt (int token){
     if (token == T_A_MAX){
     printf("\n sanity check 1\n");
     int next_token= yylex();
@@ -127,51 +132,55 @@ void paddingT(int token){
 }
 
 
-const char *checked_button(int token) {
-    if (token == T_A_CHECKED_BUTTON) {
-        int next_token = yylex();
-        if (next_token == T_EQUALS) {
-            int new_next_token = yylex();
-            if (new_next_token == T_ALPHANUMERIC) {
-                const char *alphanumeric_checked_button = yytext;
-                printf("=%s", alphanumeric_checked_button);
-                return alphanumeric_checked_button;
-            }
-        }
-    }
-    return NULL; // Return NULL if conditions are not met
-}
 
+void save_checked_button(int token) {
+    int next_token = yylex();
+    
+    if (next_token == T_EQUALS) {
+        int new_next_token = yylex();
+        if (new_next_token == T_ALPHANUMERIC) {
+                
+            // We find the position of the first > in the yytext string
+            // then we calculate the length until the first '>'
+            // and we create a new string with the extracted value
+            // This is done because the yytext contains all the radio button 
+            // attributes and we only need the alphanumeric value
+                
+            char* closing_angle_bracket = strchr(yytext, '>');
+            size_t length_until_closing_bracket = closing_angle_bracket - yytext;
+            alphanumeric_checked_button = strndup(yytext, length_until_closing_bracket);
+                    
+            printf("=%s", alphanumeric_checked_button);
 
-const char *radio_button_id(int token){
-    if (token == T_A_ID) {
-        int next_token = yylex();
-        if (next_token == T_EQUALS) {
-            int new_next_token = yylex();
-            if (new_next_token == T_ALPHANUMERIC) {
-                const char *alphanumeric_radio_button_id = yytext;
-                printf("=%s", alphanumeric_radio_button_id);
-                return alphanumeric_radio_button_id;
-            }
-        }
-    }
-    return NULL; // Return NULL if conditions are not met
-}
-
-void compare(const char *checked_button, const char *radio_button_id) {
-    if (checked_button != NULL && radio_button_id != NULL) {
-        printf("\ntesttttttttttttttttt");
-        if (strcmp(checked_button, radio_button_id) != 0) {
-            printf(" (error: android:checkedButton does not match any android:id)");
-            exit(0);
+            // we set the flag to 1 to indicate that we have passed the android:checkedButton attribute
+            // so that we check the android:id attribute only after we have passed the android:checkedButton attribute
+            passed_radio_button = 1;
+                
         }
     }
 }
+
+
+void save_android_id(int token) {
+    
+    alphanumeric_android_id = yytext;
+    
+    // we check if the alphanumeric value of android:id and android:checkedButton match
+    
+    if(strcmp(alphanumeric_android_id, alphanumeric_checked_button) != 0) {
+        lexer_error("android:id and android:checkedButton values do not match. Checked Button = ", alphanumeric_checked_button);
+        lexer_error("android:id and android:checkedButton values do not match. Android ID = ", alphanumeric_android_id);
+        printf("\n\n");
+        exit(0);
+    }
+    // we reset the flag to 0 to indicate that we have passed the android:checkedButton attribute
+    passed_radio_button = 0;
+}
+
 
 // Helper function that prints the token and the line number
-void printToken(int token, const char *tokenText, const char *alphanumeric_checked_button, const char *alphanumeric_radio_button_id) {
+void printToken(int token, const char *tokenText) {
     
-
     if (token == T_ERROR) {
         lexer_error("\nExiting program because of Invalid token", tokenText);
         printf("\n");
@@ -200,36 +209,21 @@ void printToken(int token, const char *tokenText, const char *alphanumeric_check
         unique_id(token);
     }
     
-    paddingT(token);
-    progressmaxt(token);
-
-    if (token == T_A_CHECKED_BUTTON) {
-        alphanumeric_checked_button = checked_button(token);
-        if (alphanumeric_checked_button != NULL) {
-         passed_checked_button1 = 1;
-        }
+    if (token == T_A_PADDING){
+        paddingT(token);
     }
 
-    if (token == T_A_ID) {
-        alphanumeric_radio_button_id = radio_button_id(token);
-        printf("%s", alphanumeric_radio_button_id);
-        printf("\n\n");
-        if (alphanumeric_radio_button_id != NULL) {
-            passed_checked_button2 = 1;
-        }
+    if (token == T_A_MAX){
+        progressmaxt(token);
     }
 
-    if (passed_checked_button1 == 1 && passed_checked_button2 == 1) {
-        printf("\n\n");
-        if (alphanumeric_checked_button != NULL && alphanumeric_radio_button_id != NULL) {
-            compare(alphanumeric_checked_button, alphanumeric_radio_button_id);
-        }
-        passed_checked_button1 = 0;
-        passed_checked_button2 = 0;
+    if (token == T_A_CHECKED_BUTTON){
+        save_checked_button(token);
     }
 
-    
-    
+    if (token == T_A_ID && passed_radio_button == 1){
+        save_android_id(token);
+    }
 }
 
 
@@ -288,15 +282,14 @@ void printToken(int token, const char *tokenText, const char *alphanumeric_check
 "="*                    {printf("=");}   // Replace multiple '=' with a single '='
 "<!--"                  {return T_COMMENT_OPENING_TAG;}
 "-->"                   {return T_COMMENT_CLOSING_TAG;}
-"--"                    { printToken(T_ERROR, yytext, NULL, NULL); }
+"--"                    { printToken(T_ERROR, yytext); }
 \n                      { current_line++; return T_NEWLINE;}
 [ \t\r]                 {/*ignore whitespaces*/}
-.                       { printToken(T_ERROR, yytext, NULL, NULL); }
+.                       { printToken(T_ERROR, yytext); }
 %%
 
 int main(int argc, char **argv) {
-    const char *alphanumeric_checked_button = NULL; // Initialize to NULL
-    const char *alphanumeric_radio_button_id = NULL; // Initialize to NULL
+
 
     if (argc < 2) {
         printf("Usage: %s <input_file>\n", argv[0]);
@@ -314,7 +307,7 @@ int main(int argc, char **argv) {
     int token;
     while ((token = yylex()) != 0) {
         if (token != T_NEWLINE) {
-            printToken(token, yytext, alphanumeric_checked_button, alphanumeric_radio_button_id); // Pass additional parameters        
+            printToken(token, yytext); // Pass additional parameters        
         }
        
     }

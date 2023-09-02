@@ -64,7 +64,7 @@
                     </PrimaryAttributes>
                     <AndroidID android:id=b17>
                     <AndroidMax android:max=100>
-                    <AndroidProgress android:progress=151>
+                    <AndroidProgress android:progress=70>
                 </ProgressBar>
             </element>
     </LinearLayout>
@@ -130,7 +130,7 @@
                     </PrimaryAttributes>
                     <AndroidID android:id=b27>
                     <AndroidMax android:max=100>
-                    <AndroidProgress android:progress=50>
+                    <AndroidProgress android:progress=99>
                 </ProgressBar>
             </element>      
     </RelativeLayout>

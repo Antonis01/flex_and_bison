@@ -13,9 +13,8 @@ extern int yylex();
 
 
 int current_line = 1, check_line = 0, check = 0;
-char *alphanumeric_checked_button = NULL;
-char *alphanumeric_android_id = NULL;
-int passed_radio_button = 0;
+char *alphanumeric_checked_button = NULL, *alphanumeric_android_id = NULL;
+int passed_radio_button = 0, android_max_integer, android_progress_integer;
 
 
 void lexer_error(const char *message, const char *tokenText) {
@@ -42,9 +41,7 @@ int is_unique_alphanumeric(const char *alphanumeric) {
     return 1; // Unique
 }
 
-void print_maxT(const char temp[]){
-    printf("=%s", temp);
-}
+
 
 // Function that checks if android:id uses unique values
 void unique_id(int token) {
@@ -92,44 +89,39 @@ void paddingT(int token){
 }
 
 
-void progressmaxt (int token){
-    if (token == T_A_MAX){
-    printf("\n sanity check 1\n");
-    int next_token= yylex();
-        if (next_token == T_EQUALS){
-            printf("\n sanity check 2\n");
-            int new_next_token = yylex();
-                if (new_next_token == T_INTEGER){
-                    printf("\n sanity check 3\n");
-                    const char *temp = yytext;
-                    print_maxT(temp);
-                    int new_new_next_token = yylex();
-                        if (new_new_next_token = T_A_PROGRESS){
-                            printf("\n sanity check 4\n");
-                            int new_new_new_next_token = yylex();
-                                if (new_new_new_next_token = T_EQUALS){
-                                    printf("\n sanity check 5\n");
-                                    int final_token = yylex();
-                                        if(final_token = T_INTEGER){
-                                            printf("\n sanity check 6\n");
-                                            const char *progressnum = yytext;
-                                                if(progressnum > 0 && progressnum <= temp){
-                                                    printf("\n sanity check 8\n");
-                                                    printf("=%s", progressnum);}
-                                                else{
-                                                     printf("\n sanity check 7\n");
-                                                    lexer_error("\nExiting program because of Invalid token", progressnum);
-                                                    printf("\n\n");
-                                                    exit(0);}
-                                                
-                                            }
-                                        }
-                                }
-                        }
-                }
-
+void android_max_value(int token) {
+    int next_token = yylex();
+    
+    if (next_token == T_EQUALS) {
+        int new_next_token = yylex();
+        if (new_next_token == T_INTEGER) {
+            // Convert the yytext string to an integer
+            android_max_integer = atoi(yytext);
+            printf("=%d", android_max_integer);
         }
+    }
 }
+
+void android_progress_value(int token) {
+    int next_token = yylex();
+    
+    if (next_token == T_EQUALS) {
+        int new_next_token = yylex();
+        if (new_next_token == T_INTEGER) {
+            // Convert the yytext string to an integer
+            android_progress_integer = atoi(yytext);
+            printf("=%d", android_progress_integer);
+            
+            // Compare if the android:progress value is between 0 and android:max
+            if (android_progress_integer < 0 || android_progress_integer > android_max_integer) {
+                lexer_error("android:progress value is not between 0 and android:max. Value = ", yytext);
+                printf("\n\n\n");
+                exit(0);
+            }
+        }
+    }
+}
+
 
 
 
@@ -214,7 +206,11 @@ void printToken(int token, const char *tokenText) {
     }
 
     if (token == T_A_MAX){
-        progressmaxt(token);
+        android_max_value(token);
+    }
+
+    if (token == T_A_PROGRESS){
+        android_progress_value(token);
     }
 
     if (token == T_A_CHECKED_BUTTON){

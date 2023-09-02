@@ -268,8 +268,8 @@ void printToken(int token, const char *tokenText) {
 "value"                 {return T_VALUE;}
 "wrap_content"          {return T_WRAP_CONTENT;}
 "match_parent"          {return T_MATCH_PARENT;}
-"PositiveInteger"       {return T_POSITIVE_INTEGER;}
-[0-9]+                  {return T_INTEGER;}
+[0-9]+                  {return T_POSITIVE_INTEGER;}
+[-]?[0-9]+              {return T_INTEGER;}
 [a-zA-Z0-9]+            {return T_ALPHANUMERIC;}
 "<"                     {return T_OPEN_ANGLE;}
 ">"                     {return T_CLOSE_ANGLE;}

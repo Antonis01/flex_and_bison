@@ -76,7 +76,7 @@ root: LinearLayout
      |RelativeLayout
     ;
 
-LinearLayout: T_OPEN_ANGLE T_LINEAR_LAYOUT LinearAttributes T_CLOSE_ANGLE Element T_CLOSE_LINEAR_LAYOUT
+LinearLayout: T_OPEN_ANGLE T_LINEAR_LAYOUT LinearAttributes  Element T_CLOSE_LINEAR_LAYOUT
         ;
 
 RelativeLayout: T_OPEN_ANGLE T_RELATIVE_LAYOUT RelativeAttributes T_CLOSE_ANGLE Element T_CLOSE_RELATIVE_LAYOUT
@@ -106,13 +106,13 @@ ImageView: T_OPEN_ANGLE PrimaryAttribute Src ID Padding T_CLOSING_TAG
 Button: T_OPEN_ANGLE PrimaryAttribute Text ID Padding T_CLOSING_TAG
 ;
 
-RadioGroup:T_OPEN_ANGLE PrimaryAttribute ID CheckedButton T_CLOSE_ANGLE RadioButton CountElements T_CLOSE_RADIO_GROUP
+RadioGroup:T_OPEN_ANGLE PrimaryAttribute ID CheckedButton RadioButton CountElements T_CLOSING_TAG
 ;
 
 CountElements: T_COUNT_ELEMENTS T_EQUALS T_POSITIVE_INTEGER
 ;
 
-RadioButton: PrimaryAttribute Text ID
+RadioButton: T_OPEN_ANGLE PrimaryAttribute Text ID T_CLOSING_TAG
 ;
 
 ProgressBar:PrimaryAttribute Progress Max ID
@@ -126,7 +126,7 @@ Height: T_A_LAYOUT_HEIGHT T_EQUALS T_WHITESPACE Value
 Width: T_A_LAYOUT_WIDTH T_EQUALS T_WHITESPACE  Value
 ;
 
-ID: T_A_ID T_EQUALS T_WHITESPACE T_ALPHANUMERIC T_CLOSE_ANGLE
+ID: T_A_ID T_EQUALS T_WHITESPACE T_ALPHANUMERIC 
 ;
 
 Orientation: T_A_ORIENTATION T_EQUALS T_WHITESPACE T_ALPHANUMERIC
@@ -147,7 +147,7 @@ Padding: T_A_PADDING T_EQUALS T_WHITESPACE T_INTEGER
 CheckedButton: T_A_CHECKED_BUTTON T_EQUALS T_WHITESPACE T_ALPHANUMERIC
 ;
 
-Progress: T_A_PROGRESS T_EQUALS T_WHITESPACE T_INTEGER T_CLOSE_ANGLE
+Progress: T_A_PROGRESS T_EQUALS T_WHITESPACE T_INTEGER 
 ;
 
 Max: T_A_MAX T_EQUALS T_WHITESPACE T_INTEGER

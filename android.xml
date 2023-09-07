@@ -57,6 +57,8 @@
                         <AndroidText android:text=hello world>
                         <AndroidID android:id=b16>
                     </RadioButton>
+                    count:elements=19
+                </RadioGroup>
                 <ProgressBar>
                     <PrimaryAttributes>
                     <AndroidHeight android:layout_height=wrap_content>

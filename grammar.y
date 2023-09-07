@@ -65,7 +65,9 @@ void yyerror(const char* s){
 %token T_NEWLINE
 %token T_COMMENT_OPENING_TAG
 %token T_COMMENT_CLOSING_TAG
+%token T_COUNT_ELEMENTS
 %start root 
+
 
 
 %%
@@ -104,7 +106,10 @@ ImageView: T_OPEN_ANGLE PrimaryAttribute Src ID Padding T_CLOSING_TAG
 Button: T_OPEN_ANGLE PrimaryAttribute Text ID Padding T_CLOSING_TAG
 ;
 
-RadioGroup:T_OPEN_ANGLE PrimaryAttribute ID CheckedButton T_CLOSE_ANGLE RadioButton T_CLOSE_RADIO_GROUP
+RadioGroup:T_OPEN_ANGLE PrimaryAttribute ID CheckedButton T_CLOSE_ANGLE RadioButton CountElements T_CLOSE_RADIO_GROUP
+;
+
+CountElements: T_COUNT_ELEMENTS T_EQUALS T_POSITIVE_INTEGER
 ;
 
 RadioButton: PrimaryAttribute Text ID

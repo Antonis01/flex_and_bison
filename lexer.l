@@ -14,7 +14,7 @@ extern int yylex();
 
 int current_line = 1, check_line = 0, check = 0;
 char *alphanumeric_checked_button = NULL, *alphanumeric_android_id = NULL;
-int passed_radio_button = 0, android_max_integer, android_progress_integer;
+int passed_radio_button = 0, android_max_integer, android_progress_integer, element_counter_radio_group = 0;
 
 
 void lexer_error(const char *message, const char *tokenText) {
@@ -170,6 +170,33 @@ void save_android_id(int token) {
 }
 
 
+void counter_radio_group(int token){
+    if (token == '\n'){
+        element_counter_radio_group++;
+        int next_token = yylex();
+        if (next_token == T_COUNT_ELEMENTS){
+            element_counter_radio_group = 0;
+        }
+
+    }
+    else if (token == T_COUNT_ELEMENTS){
+        exit(0);
+        int next_token = yylex();
+        if (next_token == T_EQUALS){
+            int new_next_token = yylex();
+            if (new_next_token == T_POSITIVE_INTEGER){
+                int count_elements = atoi(yytext);
+                if (count_elements != element_counter_radio_group){
+                    lexer_error("The count:elements value is not equal to the number of elements. Value = ", yytext);
+                    printf("\n\n");
+                    exit(0);
+                }
+            }
+        }
+    }
+}
+
+
 // Helper function that prints the token and the line number
 void printToken(int token, const char *tokenText) {
     
@@ -220,6 +247,10 @@ void printToken(int token, const char *tokenText) {
     if (token == T_A_ID && passed_radio_button == 1){
         save_android_id(token);
     }
+
+    if (token == T_RADIO_GROUP){
+        counter_radio_group(token);
+    }
 }
 
 
@@ -268,6 +299,7 @@ void printToken(int token, const char *tokenText) {
 "value"                 {return T_VALUE;}
 "wrap_content"          {return T_WRAP_CONTENT;}
 "match_parent"          {return T_MATCH_PARENT;}
+"count:elements"        {return T_COUNT_ELEMENTS;}
 [0-9]+                  {return T_POSITIVE_INTEGER;}
 [-]?[0-9]+              {return T_INTEGER;}
 [a-zA-Z0-9]+            {return T_ALPHANUMERIC;}

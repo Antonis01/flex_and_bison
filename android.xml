@@ -57,7 +57,7 @@
                         <AndroidText android:text=hello world>
                         <AndroidID android:id=b16>
                     </RadioButton>
-                    count:elements=19
+                    count:elements=6
                 </RadioGroup>
                 <ProgressBar>
                     <PrimaryAttributes>

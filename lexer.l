@@ -14,7 +14,8 @@ extern int yylex();
 
 int current_line = 1, check_line = 0, check = 0;
 char *alphanumeric_checked_button = NULL, *alphanumeric_android_id = NULL;
-int passed_radio_button = 0, android_max_integer, android_progress_integer, element_counter_radio_group = 0;
+int passed_radio_button = 0, android_max_integer, android_progress_integer;
+int element_start_line=0, element_end_line=0, element_counter_radio_group = 0;
 
 
 void lexer_error(const char *message, const char *tokenText) {
@@ -171,29 +172,40 @@ void save_android_id(int token) {
 
 
 void counter_radio_group(int token){
-    if (token == '\n'){
-        element_counter_radio_group++;
-        int next_token = yylex();
-        if (next_token == T_COUNT_ELEMENTS){
-            element_counter_radio_group = 0;
-        }
-
+    
+    if (token == T_RADIO_BUTTON){
+        element_start_line = current_line;
     }
-    else if (token == T_COUNT_ELEMENTS){
-        exit(0);
+
+    if (token == T_CLOSE_RADIO_BUTTON){
+        element_end_line = current_line;
+    }
+
+    // check if the value of count:elements is equal to the number of (elements_end_line-elements_start_line)
+    if (token == T_COUNT_ELEMENTS){
         int next_token = yylex();
+        
         if (next_token == T_EQUALS){
             int new_next_token = yylex();
-            if (new_next_token == T_POSITIVE_INTEGER){
-                int count_elements = atoi(yytext);
-                if (count_elements != element_counter_radio_group){
-                    lexer_error("The count:elements value is not equal to the number of elements. Value = ", yytext);
-                    printf("\n\n");
-                    exit(0);
-                }
+            const char *elementCount = yytext;
+            int elementIntCount = atoi(yytext);
+            int elements = element_end_line - element_start_line;
+            elements--;
+            
+            if (elementIntCount != elements){
+                printf("=%d", elements);
+                lexer_error("The value of count:elements is not equal to the number of elements in RadioButton. Value = ", elementCount);
+                printf("\n%d != %d", elementIntCount, elements);
+                printf("\n\n");
+                exit(0);
+            
+            }else{
+                printf("=%d", elements);
             }
+            
         }
     }
+    
 }
 
 
@@ -248,9 +260,8 @@ void printToken(int token, const char *tokenText) {
         save_android_id(token);
     }
 
-    if (token == T_RADIO_GROUP){
-        counter_radio_group(token);
-    }
+    counter_radio_group(token);
+    
 }
 
 

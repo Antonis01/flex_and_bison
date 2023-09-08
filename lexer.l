@@ -177,35 +177,49 @@ void counter_radio_group(int token){
         element_start_line = current_line;
     }
 
-    if (token == T_CLOSE_RADIO_BUTTON){
+    if (token == T_CLOSING_TAG){
         element_end_line = current_line;
     }
 
     // check if the value of count:elements is equal to the number of (elements_end_line-elements_start_line)
-    if (token == T_COUNT_ELEMENTS){
+    if (token == T_A_COUNT_ELEMENTS){
         int next_token = yylex();
         
         if (next_token == T_EQUALS){
             int new_next_token = yylex();
-            const char *elementCount = yytext;
-            int elementIntCount = atoi(yytext);
-            int elements = element_end_line - element_start_line;
-            elements--;
-            
-            if (elementIntCount != elements){
-                printf("=%d", elements);
-                lexer_error("The value of count:elements is not equal to the number of elements in RadioButton. Value = ", elementCount);
-                printf("\n%d != %d", elementIntCount, elements);
-                printf("\n\n");
-                exit(0);
-            
-            }else{
-                printf("=%d", elements);
-            }
-            
+            if (new_next_token == T_QUOTE){
+                int n_next_token = yylex();
+
+                const char *elementCount = yytext;
+                int elementIntCount = atoi(yytext);
+                int elements = element_end_line - element_start_line;
+                
+                if (elementIntCount != elements){
+                    printf("=%d", elements);
+                    lexer_error("The value of count:elements is not equal to the number of elements in RadioButton. Value = ", elementCount);
+                    printf("\n%d != %d", elementIntCount, elements);
+                    printf("\n\n");
+                    exit(0);
+                
+                }else{
+                    printf("=\"%d", elements);
+                }
+            }        
         }
     }
     
+}
+
+void quotation_mark(int token){
+    if (token == T_EQUALS){
+        int next_token = yylex();
+        
+        if (next_token != T_QUOTE){
+            lexer_error("\nQuotation mark is missing after equls", yytext);
+            printf("\n\n");
+            exit(0);
+        }
+    }
 }
 
 
@@ -235,6 +249,8 @@ void printToken(int token, const char *tokenText) {
             check=0;
         }
     }
+
+    quotation_mark(token);
 
     if (token == T_A_ID) {
         unique_id(token);
@@ -272,7 +288,7 @@ void printToken(int token, const char *tokenText) {
 %%
 "<root>"                {return T_ROOT;}
 "</root>"               {return T_CLOSE_ROOT;}
-"<LinearLayout>"        {return T_LINEAR_LAYOUT;}
+"<LinearLayout"        {return T_LINEAR_LAYOUT;}
 "</LinearLayout>"       {return T_CLOSE_LINEAR_LAYOUT;}
 "<RelativeLayout>"      {return T_RELATIVE_LAYOUT;}
 "</RelativeLayout>"     {return T_CLOSE_RELATIVE_LAYOUT;}
@@ -284,9 +300,9 @@ void printToken(int token, const char *tokenText) {
 "</ImageView>"          {return T_CLOSE_IMAGE_VIEW;}
 "<Button>"              {return T_BUTTON;}
 "</Button>"             {return T_CLOSE_BUTTON;}
-"RadioGroup>"           {return T_RADIO_GROUP;}
+"<RadioGroup"           {return T_RADIO_GROUP;}
 "</RadioGroup>"         {return T_CLOSE_RADIO_GROUP;}
-"<RadioButton>"         {return T_RADIO_BUTTON;}
+"<RadioButton"         {return T_RADIO_BUTTON;}
 "</RadioButton>"        {return T_CLOSE_RADIO_BUTTON;}
 "<ProgressBar>"         {return T_PROGRESS_BAR;}
 "</ProgressBar>"        {return T_CLOSE_PROGRESS_BAR;}
@@ -310,14 +326,15 @@ void printToken(int token, const char *tokenText) {
 "value"                 {return T_VALUE;}
 "wrap_content"          {return T_WRAP_CONTENT;}
 "match_parent"          {return T_MATCH_PARENT;}
-"count:elements"        {return T_COUNT_ELEMENTS;}
+"android:count_elements" {return T_A_COUNT_ELEMENTS;}
 [0-9]+                  {return T_POSITIVE_INTEGER;}
 [-]?[0-9]+              {return T_INTEGER;}
 [a-zA-Z0-9]+            {return T_ALPHANUMERIC;}
 "<"                     {return T_OPEN_ANGLE;}
 ">"                     {return T_CLOSE_ANGLE;}
-"</"                    {return T_CLOSING_TAG;}
+"/>"                    {return T_CLOSING_TAG;}
 "="                     {return T_EQUALS;}
+"\""                    {return T_QUOTE;}
 "="*                    {printf("=");}   // Replace multiple '=' with a single '='
 "<!--"                  {return T_COMMENT_OPENING_TAG;}
 "-->"                   {return T_COMMENT_CLOSING_TAG;}

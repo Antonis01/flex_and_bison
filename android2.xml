@@ -26,16 +26,16 @@
     <RadioGroup
         android:id="b24"
         android:checkedButton="b25"
-        android:layout_height="wrap_content"
-        android:layout_width= "match_parent"
-
+        android:layout_height="100"
+        android:layout_width= "200"
+        
         <RadioButton
-            android:layout_height="100"
-            android:layout_width= "200"
+            android:layout_height="match_parent"
+            android:layout_width= "match_parent"
             android:text="hello world"
             android:id="b25"/>
         
-        android:count_elements="4"/>
+            android:count_elements="4"/>
     </RadioGroup>
 
     <ProgressBar
@@ -43,7 +43,7 @@
         android:layout_width= "200"
         android:id="b27"
         android:max="100"
-        android:progress="99"/>
+        android:progress="10"/>
         
 </RelativeLayout>
       

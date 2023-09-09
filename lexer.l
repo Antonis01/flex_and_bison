@@ -12,10 +12,13 @@
 extern int yylex();
 
 
-int current_line = 1, check_line = 0, check = 0;
+int current_line = 1, check_line = 0;
 char *alphanumeric_checked_button = NULL, *alphanumeric_android_id = NULL;
 int passed_radio_button = 0, android_max_integer, android_progress_integer;
 int element_start_line=0, element_end_line=0, element_counter_radio_group = 0;
+int counter_radio_button_passed_check=0;
+const char *elementCount;
+int elementIntCount = 0, elements = 0, checked_counter_radio_group = 0;
 
 
 void lexer_error(const char *message, const char *tokenText) {
@@ -29,131 +32,122 @@ void lexer_error(const char *message, const char *tokenText) {
 char unique_alphanumeric_values[MAX_ALPHANUMERIC_VALUES][64];
 int num_alphanumeric_values = 0;
 
+// 2.a
 // Function to check if the alphanumeric value is already present
 int is_unique_alphanumeric(const char *alphanumeric) {
+    
     // Parse through the array to check if the alphanumeric value is already present
     for (int i = 0; i < num_alphanumeric_values; i++) {
+    
         if (strcmp(alphanumeric, unique_alphanumeric_values[i]) == 0) {
+            printf("=\"%s\"", alphanumeric);
             lexer_error("Duplicate alphanumeric value found", alphanumeric);
             printf("\n\n");
             exit(0);
         }
     }
+    
     return 1; // Unique
 }
 
 
-
+// 2.a
 // Function that checks if android:id uses unique values
 void unique_id(int token) {
+    
     // Check if the token is android:id
-    if (token == T_A_ID) {
-        int next_token = yylex();
+        int token1 = yylex();
+        
         // Check if the next token is '='
-        if (next_token == T_EQUALS) {
-            int new_next_token = yylex();
-            // Check if the next token is alphanumeric
-            if (new_next_token == T_ALPHANUMERIC) {
-                const char *alphanumeric = yytext;
-                // Check if the alphanumeric value is unique
-                if (is_unique_alphanumeric(alphanumeric)) {
-                    // Add the new unique alphanumeric value to the array
-                    strcpy(unique_alphanumeric_values[num_alphanumeric_values], alphanumeric);
-                    num_alphanumeric_values++;
-                    printf("=%s", alphanumeric);
+        if (token1 == T_EQUALS) {
+            int token2 = yylex();
+        
+            // Check if the next token is '"'
+            if(token2 == T_QUOTE){
+                int token3 = yylex();
+        
+                // Check if the next token is alphanumeric
+                if (token3 == T_ALPHANUMERIC) {
+                    const char *alphanumeric = yytext;
+        
+                    // Check if the alphanumeric value is unique
+                    if (is_unique_alphanumeric(alphanumeric)) {
+                        // Add the new unique alphanumeric value to the array
+                        strcpy(unique_alphanumeric_values[num_alphanumeric_values], alphanumeric);
+                        num_alphanumeric_values++;
+                        printf("=\"%s", alphanumeric);
+                    }
                 }
             }
+            
         }
-    }
+    
 }
 
 
+// 2.c
+// Function that checks if android:padding uses positive integer values
 void paddingT(int token){
-    int next_token = yylex();
+    int token1 = yylex();
     
-    if (next_token == T_EQUALS){
-        int new_next_token = yylex();
-        
-        if (new_next_token == T_INTEGER){
-            const char *integerpadding = yytext;
+    if (token1 == T_EQUALS){
+        int token2 = yylex();
+
+        if (token2 == T_QUOTE){
+            
+            int token3 = yylex();
+            char *integerpadding = yytext;
                 
-            if (integerpadding > 0){
-                printf("=%s", integerpadding);
+            if (atoi(integerpadding) > 0){
+                printf("=\"%s", integerpadding);
             }
+            
             else{
+                printf("=\"%s\"", integerpadding);
                 lexer_error("\nExiting program because of Invalid token", integerpadding);
                 printf("\n\n");
                 exit(0);
-            }
+            }        
         }
     }
 }
 
 
-void android_max_value(int token) {
-    int next_token = yylex();
-    
-    if (next_token == T_EQUALS) {
-        int new_next_token = yylex();
-        if (new_next_token == T_INTEGER) {
-            // Convert the yytext string to an integer
-            android_max_integer = atoi(yytext);
-            printf("=%d", android_max_integer);
-        }
-    }
-}
-
-void android_progress_value(int token) {
-    int next_token = yylex();
-    
-    if (next_token == T_EQUALS) {
-        int new_next_token = yylex();
-        if (new_next_token == T_INTEGER) {
-            // Convert the yytext string to an integer
-            android_progress_integer = atoi(yytext);
-            printf("=%d", android_progress_integer);
-            
-            // Compare if the android:progress value is between 0 and android:max
-            if (android_progress_integer < 0 || android_progress_integer > android_max_integer) {
-                lexer_error("android:progress value is not between 0 and android:max. Value = ", yytext);
-                printf("\n\n\n");
-                exit(0);
-            }
-        }
-    }
-}
-
-
-
-
+// 2.d
 void save_checked_button(int token) {
-    int next_token = yylex();
+    int token1 = yylex();
     
-    if (next_token == T_EQUALS) {
-        int new_next_token = yylex();
-        if (new_next_token == T_ALPHANUMERIC) {
-                
-            // We find the position of the first > in the yytext string
-            // then we calculate the length until the first '>'
-            // and we create a new string with the extracted value
-            // This is done because the yytext contains all the radio button 
-            // attributes and we only need the alphanumeric value
-                
-            char* closing_angle_bracket = strchr(yytext, '>');
-            size_t length_until_closing_bracket = closing_angle_bracket - yytext;
-            alphanumeric_checked_button = strndup(yytext, length_until_closing_bracket);
-                    
-            printf("=%s", alphanumeric_checked_button);
+    if (token1 == T_EQUALS) {
+        int token2 = yylex();
 
-            // we set the flag to 1 to indicate that we have passed the android:checkedButton attribute
-            // so that we check the android:id attribute only after we have passed the android:checkedButton attribute
-            passed_radio_button = 1;
-                
+        if (token2 == T_QUOTE){
+            int token3 = yylex();
+            
+            if (token3 == T_ALPHANUMERIC) {
+                    
+                // We find the position of the first > in the yytext string
+                // then we calculate the length until the first '>'
+                // and we create a new string with the extracted value
+                // This is done because the yytext contains all the radio button 
+                // attributes and we only need the alphanumeric value
+                    
+                char* closing_angle_bracket = strchr(yytext, '>');
+                size_t length_until_closing_bracket = closing_angle_bracket - yytext;
+                alphanumeric_checked_button = strndup(yytext, length_until_closing_bracket);
+                        
+                printf("=%s", alphanumeric_checked_button);
+
+                // we set the flag to 1 to indicate that we have passed the android:checkedButton attribute
+                // so that we check the android:id attribute only after we have passed the android:checkedButton attribute
+                passed_radio_button = 1;
+                    
+            }
         }
     }
 }
 
 
+// 2.d
 void save_android_id(int token) {
     
     alphanumeric_android_id = yytext;
@@ -170,17 +164,83 @@ void save_android_id(int token) {
     passed_radio_button = 0;
 }
 
+// 2.e
+void android_max_value(int token) {
+    int token1 = yylex();
+    
+    if (token1 == T_EQUALS) {
+        int token2 = yylex();
 
+        if(token2 == T_QUOTE){
+            int token3 = yylex();
+            // Convert the yytext string to an integer
+            android_max_integer = atoi(yytext);
+            printf("=\"%d", android_max_integer);
+            
+        }
+    }
+}
+
+// 2.e
+void android_progress_value(int token) {
+    int token1 = yylex();
+    
+    if (token1 == T_EQUALS) {
+        int token2 = yylex();
+        
+        if (token2 == T_QUOTE) {
+            int token3 = yylex();
+            android_progress_integer = atoi(yytext);
+
+            // Compare if the android:progress value is between 0 and android:max
+            if (android_progress_integer < 0 || android_progress_integer > android_max_integer) {
+                printf("=\"%d\"", android_progress_integer);  
+                lexer_error("android:progress value is not between 0 and android:max. Value = ", yytext);
+                printf("\n\n\n");
+                exit(0);
+            }
+            else{
+                // Convert the yytext string to an integer
+                printf("=\"%d", android_progress_integer);            
+            }      
+        }
+    }
+}
+
+
+// 3.d
 void counter_radio_group(int token){
     
     if (token == T_RADIO_BUTTON){
         element_start_line = current_line;
+        counter_radio_button_passed_check = 1;
     }
 
-    if (token == T_CLOSING_TAG){
+    if (token == T_CLOSING_TAG && counter_radio_button_passed_check == 1){
         element_end_line = current_line;
+        counter_radio_button_passed_check = 0;
+        // we find the number of elements in RadioButton
+        elements = element_end_line - element_start_line;
+        checked_counter_radio_group = 1;
+        
+        // we check if the value of android:count_elements is equal to the number of (elements_end_line-elements_start_line)
+        // and if the value of android:count_elements is not equal to 0
+        // we added the second condition because the android:count_elements can be before the RadioButton
+        // so we need to check if the value of android:count_elements is not equal to 0
+        // and that means that the android:count_elements is before the RadioButton
+        // so the condition is only executed if the android:count_elements is before the RadioButton
+        if (elementIntCount != elements && elementIntCount != 0){
+            lexer_error("The value of count:elements is not equal to the number of elements in RadioButton. Value = ", elementCount);
+            printf("\n%d != %d", elementIntCount, elements);
+            printf("\n\n");
+            exit(0);
+        }
+                
     }
+}
 
+// 3.d
+void counter_radio_group_elements(int token){
     // check if the value of count:elements is equal to the number of (elements_end_line-elements_start_line)
     if (token == T_A_COUNT_ELEMENTS){
         int next_token = yylex();
@@ -190,24 +250,30 @@ void counter_radio_group(int token){
             if (new_next_token == T_QUOTE){
                 int n_next_token = yylex();
 
-                const char *elementCount = yytext;
-                int elementIntCount = atoi(yytext);
-                int elements = element_end_line - element_start_line;
+                // the value of android:count_elements is stored in the elementCount variable
+                // and it can be used in both counter_radio_group and counter_radio_group_elements functions
+                elementCount = yytext;
+                elementIntCount = atoi(yytext);
+                printf("=\"%d", elementIntCount);
                 
-                if (elementIntCount != elements){
-                    printf("=%d", elements);
+                // we check if the value of android:count_elements is equal to the number of (elements_end_line-elements_start_line)
+                // and if the value of checked_counter_radio_group is equal to 1
+                // we added the second condition because the android:count_elements can be after the RadioButton
+                // so we need to check if the value of checked_counter_radio_group is equal to 1
+                // and that means that the android:count_elements is after the RadioButton
+                // so the condition is only executed if the android:count_elements is after the RadioButton
+                if (elementIntCount != elements && checked_counter_radio_group == 1){
                     lexer_error("The value of count:elements is not equal to the number of elements in RadioButton. Value = ", elementCount);
                     printf("\n%d != %d", elementIntCount, elements);
                     printf("\n\n");
                     exit(0);
-                
-                }else{
-                    printf("=\"%d", elements);
+
+
                 }
             }        
         }
+ 
     }
-    
 }
 
 void quotation_mark(int token){
@@ -218,6 +284,9 @@ void quotation_mark(int token){
             lexer_error("\nQuotation mark is missing after equls", yytext);
             printf("\n\n");
             exit(0);
+        }
+        else{
+            printf("\"");
         }
     }
 }
@@ -231,22 +300,16 @@ void printToken(int token, const char *tokenText) {
         printf("\n");
         exit(0);
     } else {
-        //printf("Token at line %d: %s\n", current_line, tokenText);
+
         if (current_line == check_line){
-            if (check == 1){
-                printf("\nToken at line %d: %s", current_line, tokenText);
-                check=0;
-            }
-            else{
-                printf("%s", tokenText);
-                check=0;
-            }
-            
+
+            printf("%s", tokenText);
+
         }
         else{
             printf("\nToken at line %d: %s", current_line, tokenText);
             check_line = current_line;
-            check=0;
+            
         }
     }
 
@@ -276,7 +339,9 @@ void printToken(int token, const char *tokenText) {
         save_android_id(token);
     }
 
+    counter_radio_group_elements(token);
     counter_radio_group(token);
+
     
 }
 
@@ -286,32 +351,17 @@ void printToken(int token, const char *tokenText) {
 %}
 
 %%
-"<root>"                {return T_ROOT;}
-"</root>"               {return T_CLOSE_ROOT;}
 "<LinearLayout"        {return T_LINEAR_LAYOUT;}
 "</LinearLayout>"       {return T_CLOSE_LINEAR_LAYOUT;}
-"<RelativeLayout>"      {return T_RELATIVE_LAYOUT;}
+"<RelativeLayout"      {return T_RELATIVE_LAYOUT;}
 "</RelativeLayout>"     {return T_CLOSE_RELATIVE_LAYOUT;}
-"<element>"             {return T_ELEMENT;}
-"</element>"            {return T_CLOSE_ELEMENT;}
-"<TextView>"            {return T_TEXT_VIEW;}
-"</TextView>"           {return T_CLOSE_TEXT_VIEW;}
-"<ImageView>"           {return T_IMAGE_VIEW;}
-"</ImageView>"          {return T_CLOSE_IMAGE_VIEW;}
-"<Button>"              {return T_BUTTON;}
-"</Button>"             {return T_CLOSE_BUTTON;}
+"<TextView"            {return T_TEXT_VIEW;}
+"<ImageView"           {return T_IMAGE_VIEW;}
+"<Button"              {return T_BUTTON;}
 "<RadioGroup"           {return T_RADIO_GROUP;}
 "</RadioGroup>"         {return T_CLOSE_RADIO_GROUP;}
 "<RadioButton"         {return T_RADIO_BUTTON;}
-"</RadioButton>"        {return T_CLOSE_RADIO_BUTTON;}
-"<ProgressBar>"         {return T_PROGRESS_BAR;}
-"</ProgressBar>"        {return T_CLOSE_PROGRESS_BAR;}
-"<LinearAttributes>"    {return T_LINEAR_ATTRIBUTES;}
-"</LinearAttributes>"   {return T_CLOSE_LINEAR_ATTRIBUTES;}
-"<RelativeAttributes>"  {return T_RELATIVE_ATTRIBUTES;}
-"</RelativeAttributes>" {return T_CLOSE_RELATIVE_ATTRIBUTES;}
-"PrimaryAttributes>"    {return T_PRIMARY_ATTRIBUTES;}
-"</PrimaryAttributes>"  {return T_CLOSE_PRIMARY_ATTRIBUTES;}
+"<ProgressBar"         {return T_PROGRESS_BAR;}
 "android:layout_height" {return T_A_LAYOUT_HEIGHT;}
 "android:layout_width"  {return T_A_LAYOUT_WIDTH;}
 "android:id"            {return T_A_ID;}
@@ -323,7 +373,6 @@ void printToken(int token, const char *tokenText) {
 "android:checkedButton" {return T_A_CHECKED_BUTTON;}
 "android:progress"      {return T_A_PROGRESS;}
 "android:max"           {return T_A_MAX;}
-"value"                 {return T_VALUE;}
 "wrap_content"          {return T_WRAP_CONTENT;}
 "match_parent"          {return T_MATCH_PARENT;}
 "android:count_elements" {return T_A_COUNT_ELEMENTS;}

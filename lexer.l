@@ -434,7 +434,7 @@ void printToken(int token, const char *tokenText) {
 "/>"                     {return T_CLOSING_TAG;}
 "="                      {return T_EQUALS;}
 "\""                     {return T_QUOTE;}
-"="*                     {printf("=");}   // Replace multiple '=' with a single '='
+"="*                     {printf("=");}   /* Replace multiple '=' with a single '=' */
 "<!--"                   {return T_COMMENT_OPENING_TAG;}
 "-->"                    {return T_COMMENT_CLOSING_TAG;}
 "--"                     { printToken(T_ERROR, yytext); }

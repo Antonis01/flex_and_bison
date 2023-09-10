@@ -32,13 +32,15 @@
         android:checkedButton="c1"
         android:layout_height="wrap_content"
         android:layout_width= "match_parent"
-        android:count_elements="4">
         
         <RadioButton
             android:layout_height="match_parent"
             android:layout_width= "match_parent"
             android:text="hello world"
             android:id="c1"/>   
+        
+        android:count_elements="5">
+
     </RadioGroup>
                 
     <ProgressBar

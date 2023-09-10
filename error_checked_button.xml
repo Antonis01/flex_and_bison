@@ -29,7 +29,7 @@
     <RadioGroup
 
         android:id="b4"
-        android:checkedButton="c1"
+        android:checkedButton="c2"
         android:layout_height="wrap_content"
         android:layout_width= "match_parent"
         android:count_elements="4">

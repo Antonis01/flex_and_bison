@@ -46,5 +46,5 @@
             android:layout_width= "match_parent"
             android:id="b6"
             android:max="100"
-            android:progress="70"/>
+            android:progress="170"/>
 </LinearLayout>

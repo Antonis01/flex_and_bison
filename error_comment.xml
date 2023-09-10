@@ -8,28 +8,28 @@
         android:layout_height= "match_parent"
         android:layout_width="wrap_content"
         android:text="hello world"
-        android:id="b1"
+        android:id="b11"
         android:textColor="red"/>
 
     <ImageView
         android:layout_height="wrap_content"
         android:layout_width= "wrap_content"
         android:src="hello world"
-        android:id="b2"
+        android:id="b12"
         android:padding="10"/>
 
     <Button
         android:layout_height="wrap_content"
         android:layout_width= "match_parent"
         android:text="hello world"
-        android:id="b3"
+        android:id="b13"
         android:padding="10"/>
-        <!-- Testing -->
+        <!-- Test--ing -->
     
     <RadioGroup
 
-        android:id="b4"
-        android:checkedButton="c1"
+        android:id="b14"
+        android:checkedButton="b15"
         android:layout_height="wrap_content"
         android:layout_width= "match_parent"
         android:count_elements="4">
@@ -38,13 +38,13 @@
             android:layout_height="match_parent"
             android:layout_width= "match_parent"
             android:text="hello world"
-            android:id="c1"/>   
+            android:id="b15"/>   
     </RadioGroup>
                 
     <ProgressBar
             android:layout_height="wrap_content"
             android:layout_width= "match_parent"
-            android:id="b6"
+            android:id="b17"
             android:max="100"
             android:progress="70"/>
 </LinearLayout>

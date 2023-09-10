@@ -327,7 +327,7 @@ void quotation_mark(int token){
         int next_token = yylex();
         
         if (next_token != T_QUOTE){
-            lexer_error("\nQuotation mark is missing after equls", yytext);
+            lexer_error("\nQuotation mark is missing after equals sign.", "\"");
             printf("\n\n");
             exit(0);
         }

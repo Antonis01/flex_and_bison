@@ -36,8 +36,6 @@ void yyerror(const char* s){
 %token T_A_CHECKED_BUTTON
 %token T_A_PROGRESS
 %token T_A_MAX
-%token T_VALUE
-%token T_INTEGER
 %token T_ALPHANUMERIC
 %token T_OPEN_ANGLE
 %token T_CLOSE_ANGLE
@@ -75,7 +73,7 @@ LinearElement: TextView
                 | LinearLayout
                 ;
 
-RelativeElement: 
+RelativeElement: // In case we don't want to use any RelativeElement
                | TextView
                | ImageView
                | Button
@@ -90,13 +88,14 @@ LinearAttributes: PrimaryAttribute
                 | PrimaryAttribute ID Orientation
                 ;
 
-RelativeAttributes: PrimaryAttribute ID
+RelativeAttributes: PrimaryAttribute 
+                | PrimaryAttribute ID
                 ;
 
 TextView: T_TEXT_VIEW PrimaryAttribute Text T_CLOSING_TAG
         | T_TEXT_VIEW PrimaryAttribute Text ID  T_CLOSING_TAG
         | T_TEXT_VIEW PrimaryAttribute Text TextColour T_CLOSING_TAG
-        | T_TEXT_VIEW PrimaryAttribute Text TextColour ID T_CLOSING_TAG
+        | T_TEXT_VIEW PrimaryAttribute Text ID TextColour T_CLOSING_TAG
         ;
 
 ImageView: T_IMAGE_VIEW PrimaryAttribute Src T_CLOSING_TAG
@@ -167,10 +166,10 @@ Padding: T_A_PADDING T_EQUALS T_QUOTE T_POSITIVE_INTEGER T_QUOTE
 CheckedButton: T_A_CHECKED_BUTTON T_EQUALS T_QUOTE T_ALPHANUMERIC T_QUOTE
 ;
 
-Progress: T_A_PROGRESS T_EQUALS T_QUOTE T_INTEGER T_QUOTE
+Progress: T_A_PROGRESS T_EQUALS T_QUOTE T_POSITIVE_INTEGER T_QUOTE
 ;
 
-Max: T_A_MAX T_EQUALS T_QUOTE T_INTEGER T_QUOTE
+Max: T_A_MAX T_EQUALS T_QUOTE T_POSITIVE_INTEGER T_QUOTE
 ;
 
 Value: T_QUOTE T_WRAP_CONTENT T_QUOTE

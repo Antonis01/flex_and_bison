@@ -28,14 +28,14 @@
         android:checkedButton="b25"
         android:layout_height="100"
         android:layout_width= "200"
-        
+        android:count_elements="4">
+
         <RadioButton
             android:layout_height="match_parent"
             android:layout_width= "match_parent"
             android:text="hello world"
             android:id="b25"/>
         
-            android:count_elements="4"/>
     </RadioGroup>
 
     <ProgressBar

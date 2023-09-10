@@ -24,22 +24,21 @@
         android:text="hello world"
         android:id="b13"
         android:padding="10"/>
-                
+        <!-- Testing -->
+    
     <RadioGroup
 
         android:id="b14"
         android:checkedButton="b15"
         android:layout_height="wrap_content"
         android:layout_width= "match_parent"
-        android:count_elements="4"
+        android:count_elements="4">
         
         <RadioButton
             android:layout_height="match_parent"
             android:layout_width= "match_parent"
             android:text="hello world"
-            android:id="b15"/>
-        
-        />
+            android:id="b15"/>   
     </RadioGroup>
                 
     <ProgressBar
